@@ -1,0 +1,25 @@
+{
+  "name": "wdys",
+  "version": "1.0.0",
+  "description": "WDYS node.js server REST API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Criedor/wdys_api.git"
+  },
+  "keywords": [
+    "wdys",
+    "translation",
+    "management",
+    "api"
+  ],
+  "author": "A. Silva, C. Steiner, P. Porschen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Criedor/wdys_api/issues"
+  },
+  "homepage": "https://github.com/Criedor/wdys_api#readme"
+}
