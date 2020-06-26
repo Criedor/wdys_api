@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 
 var ProjectsSchema = new Schema(
   {
-    //project_id replaced by mongoose "_id"
     projectname: { 
       type: String, 
       required: true, 

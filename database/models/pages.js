@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 
 var PagesSchema = new Schema(
   {
-    //page_id replaced by mongoose "_id"
     pagename: { 
       type: String, 
       required: true, 

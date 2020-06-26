@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 
 var UsersSchema = new Schema(
   {
-    //user_id replaced by mongoose "_id"
     password: { 
       type: String, 
       required: true, 

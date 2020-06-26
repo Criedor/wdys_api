@@ -17,7 +17,7 @@ exports.snapshot = (req,res) => {
         })
     page.save((err)=>{
         if (err) {console.log(err); return res.send({'errorcode': 'Page creation failed'})}
-        else { console.log("page saved"); return (res.send("Page successfully created."))
+        else { return (res.send("Page successfully created."))
         }
     });
 }
@@ -30,7 +30,7 @@ exports.getpage = (req,res) => {
             Pages.findOne({_id: page.base_page_id})                                         //get basepage
                 .exec( (err, basepage) => {
                 if(basepage && !err) {
-                res.send({"page": page, "basepage": basepage})} 
+                res.send({"translationpage": page, "basepage": basepage})} 
                 else {return res.send({"errorcode": "Could not load requested basepage"})}
                 });
             }
