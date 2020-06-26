@@ -184,8 +184,7 @@ __DB MODELS SCHEMA
 
 ___UsersSchema(
 
-  {
-  
+  {  
     password: { 
       type: String, 
       required: true, 
@@ -231,8 +230,7 @@ ___UsersSchema(
 
 ___ProjectsSchema (
 
-  {
-  
+  {  
     projectname: { 
       type: String, 
       required: true, 
@@ -268,8 +266,7 @@ ___ProjectsSchema (
 
 ___PagesSchema(
 
-  {
-  
+  {  
     pagename: { 
       type: String, 
       required: true, 
@@ -278,49 +275,40 @@ ___PagesSchema(
       maxlength: 100,
       required: true,
       unique: true
-    },
-    
+    },    
     description: { 
       type: String, 
       // minlength: 3, 
       // maxlength: 600
-    },
-    
+    },    
     assigned: { 
       type: Date 
-    },
-    
+    },    
     page_url: { 
       type: String,
       required: true
-    },
-    
+    },    
     base_lang: { 
       type: String, 
       required: true, 
-    },
-    
+    },    
     lang: { // The language the page will be translated into
       type: String, 
-    }, 
-    
+    },     
     base_project_id: { 
       type: String, 
       required: true, 
-    },
-    
+    },    
     base_page_id: { // _id of the base snapshot page
       type: String, 
       default: "base"
-    },
-    
+    },    
     translator_id: { // _id of the assigned translator
       type: String, 
     },
     status: { 
       type: String,
-    },
-    
+    },    
     innerHTML: { 
       type: String, 
       required: true, 
