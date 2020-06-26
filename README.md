@@ -1,6 +1,6 @@
 # wdys_api
 
-/////////////API calls:\\\\\\\\\\\\\\\
+////////// API calls \\\\\\\\\\
 
 Overview:
 
@@ -209,11 +209,8 @@ var UsersSchema = new Schema(
     }
     
   },
-  
   { timestamps: true },
-  
   { collection: 'users'}
-  
 );
 
 
@@ -252,12 +249,9 @@ var ProjectsSchema = new Schema(
       type: Date      
     }
     
-  },
-  
-  { timestamps: true },
-  
-  { collection: 'projects'}
-  
+  },  
+  { timestamps: true },  
+  { collection: 'projects'}  
 );
 
 
@@ -321,10 +315,7 @@ var PagesSchema = new Schema(
       required: true, 
     },
     
-  },
-  
-  { timestamps: true },
-  
-  { collection: 'pages'}
-  
+  },  
+  { timestamps: true },  
+  { collection: 'pages'}  
 );
