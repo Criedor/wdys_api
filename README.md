@@ -6,7 +6,9 @@ Overview:
 
 
 ->Webversion login
+
     post '/login'
+    
     body: email
           password
   
@@ -20,7 +22,9 @@ Overview:
             
             
 ->Webversion signup
+
     post /signup'
+    
     body: email
           password
           displayname
@@ -34,7 +38,9 @@ Overview:
   
 
 ->Initial data set onload of the web dashboard
+
     post /initial
+    
     body: owner_id        //is ==user_id
     
     returns:  "errorcode": "No languages found"
@@ -44,8 +50,11 @@ Overview:
               langs*, projects**                             // *a collection of all defined langs for translation 
                                                              // ** a set of all existing projects the user owns
     
+    
 ->Creates a new project for a user
+
      post /projects/create
+     
      body:  projectname
             langs
             baselang
@@ -56,8 +65,10 @@ Overview:
                 or
                 project
                 
-->Load specific project of a user                
+->Load specific project of a user           
+
     post  /projects/:project_id
+    
     body: user_id
     
     returns:  "errorcode": "Could not load requested project", "project_id": XXXXX
@@ -65,7 +76,9 @@ Overview:
               project, pages*                                 //
     
 ->Applies changes to a specific project of a TM (projectname, deadline, langs). If a lang is added to the project it automatically creates a new translationpage for the added lang. 
+
     post  /projects/:project_id/update
+    
     body: user_id
           projectname
           langs
@@ -79,7 +92,9 @@ Overview:
               
 
 ->Extension creates a base page snapshot
+
     post  /projects/:project_id/snapshot
+    
     body: pagename
           description
           page_url
@@ -93,7 +108,9 @@ Overview:
   
   
 ->On initial load of the extension by a TM he gets all his projects and the related base pages 
+
     post  /projects/extensions/initial
+    
     body: owner_id              //is = user_id 
           
     returns:  "errorcode": "No related pages found"
@@ -103,7 +120,9 @@ Overview:
               projects, basepages       
       
 ->On initial load of the extension by a TR he gets all his translation pages and the related projects    
+
     post    /translators/extension/initial
+    
     body:   translator_id              //is = user_id    
           
     returns:  "errorcode": "No related pages found"
@@ -113,7 +132,9 @@ Overview:
               projects, translationpages
               
 ->A TR can load a specific translationpage and the related basepage              
+
     post    /translators/extension/getpage
+    
     body:   translator_id               //is = user_id    
             pagename
           
@@ -125,7 +146,9 @@ Overview:
               
               
 ->Saves a snapshot of a specific page a translator worked on              
+
     post    /translators/extension/sendpage'
+    
     body:   translator_id               //is = user_id    
             pagename
             innerHTML
