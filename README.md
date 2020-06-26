@@ -5,7 +5,7 @@
 Overview:
 
 
-->Webversion login
+"/login" -> Webversion login
 
     post '/login'
     
@@ -21,7 +21,7 @@ Overview:
             
             
             
-->Webversion signup
+"/signup" -> Webversion signup
 
     post /signup'
     
