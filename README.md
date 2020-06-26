@@ -1,8 +1,8 @@
 # wdys_api
 
-__API calls
+__API calls___
 
-___Overview:
+___Overview:___
 
 
 "/login" -> Webversion login
@@ -17,7 +17,8 @@ ___Overview:
               Errorcode 2 //wrong email
               or
               setheader x-token
-              token, user_id, displayname, role
+              token, user_id, displayname, role    
+            
             
             
             
@@ -37,6 +38,8 @@ ___Overview:
               token, user_id, displayname, role
   
 
+
+
 "/initial" -> Initial data set onload of the web dashboard
 
     post /initial
@@ -49,6 +52,7 @@ ___Overview:
               or
               langs*, projects**                             // *a collection of all defined langs for translation 
                                                              // ** a set of all existing projects the user owns
+    
     
     
 "/projects/create" -> Creates a new project for a user
@@ -64,7 +68,10 @@ ___Overview:
      returns:   'errorcode': 'Project creation failed'
                 or
                 project
-                
+
+
+
+
 "/projects/:project_id" -> Load specific project of a user           
 
     post  /projects/:project_id
@@ -74,7 +81,10 @@ ___Overview:
     returns:  "errorcode": "Could not load requested project", "project_id": XXXXX
               or
               project, pages*                                 //
-    
+
+
+
+
 "/projects/:project_id/update" -> Applies changes to a specific project of a TM (projectname, deadline, langs). If a lang is added to the project it automatically creates a new translationpage for the added lang. 
 
     post  /projects/:project_id/update
@@ -91,6 +101,7 @@ ___Overview:
               "project updated"
               
 
+
 "/projects/:project_id/snapshot" -> Extension creates a base page snapshot
 
     post  /projects/:project_id/snapshot
@@ -106,7 +117,8 @@ ___Overview:
               or
               "Page successfully created."    
   
-  
+ 
+ 
 "/projects/extensions/initial" -> On initial load of the extension by a TM he gets all his projects and the related base pages 
 
     post  /projects/extensions/initial
@@ -118,7 +130,9 @@ ___Overview:
               "errorcode": "No projects found."
               or
               projects, basepages       
-      
+
+
+
 "/translators/extension/initial" -> On initial load of the extension by a TR he gets all his translation pages and the related projects    
 
     post    /translators/extension/initial
@@ -130,7 +144,9 @@ ___Overview:
               "errorcode": "No projects found."
               or
               projects, translationpages
-              
+ 
+ 
+ 
 "/translators/extension/getpage" -> A TR can load a specific translationpage and the related basepage              
 
     post    /translators/extension/getpage
@@ -144,7 +160,8 @@ ___Overview:
               or
               translationpage, basepage
               
-              
+  
+  
 "/translators/extension/sendpage'" -> Saves a snapshot of a specific page a translator worked on              
 
     post    /translators/extension/sendpage'
@@ -207,9 +224,7 @@ ___UsersSchema(
       type: Array, 
       required: true
     }    
-  },
-  { timestamps: true },
-  { collection: 'users'}
+  },{ timestamps: true },{ collection: 'users'}
 );
 
 
@@ -247,9 +262,7 @@ ___ProjectsSchema (
     deadline: { 
       type: Date      
     }    
-  },  
-  { timestamps: true },  
-  { collection: 'projects'}  
+  }, { timestamps: true }, { collection: 'projects'}  
 );
 
 
@@ -312,7 +325,5 @@ ___PagesSchema(
       type: String, 
       required: true, 
     },    
-  },  
-  { timestamps: true },  
-  { collection: 'pages'}  
+  }, { timestamps: true }, { collection: 'pages'}  
 );
