@@ -38,7 +38,7 @@ exports.signup = (req,res) => {
                 if (err) { return res.set('x-errcode', 2).send({'errorcode': '2'})}
                 else {
                     const token = jwt.sign({ 'name': req.body.name }, process.env.SECRET)
-                    return (res.set('x-token', token).send({token:`${token}`, displayname:`${req.body.displayname}`, user_id: user._id}))
+                    return (res.set('x-token', token).send({token:`${token}`, displayname:`${req.body.displayname}`, user_id: user._id, role: user.role}))
                 }});
             }
         });

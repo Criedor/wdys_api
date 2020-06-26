@@ -16,8 +16,8 @@ router.post('/projects/create', projectController.create) //creates a new projec
 router.post('/projects/:project_id', projectController.showProjectById) // shows a specific project of a user
 router.post('/projects/:project_id/update', projectController.updateProject) // Applies changes to a specific project of a user (projectname, deadline, langs)
 router.post('/projects/:project_id/snapshot', pageController.snapshot) // Extension creates a page snapshot, only available for a translation manager
-// router.post('/projects/extensions/initial', pageController.projects_initial) TO DO
-// router.post('/translators/extension/initial', pageController.translator_initial) TO DO
+router.post('/projects/extensions/initial', projectController.projects_initial) //On initial load of the extension by a TM he gets all his projects and the related base pages
+router.post('/translators/extension/initial', projectController.translator_initial) //on initial load of the extension by a TR he gets all his translation pages and the related projects
 router.post('/translators/extension/getpage', pageController.getpage) // loads a snapshot of a specific page for translator and also send basepage innerHTML
 router.post('/translators/extension/sendpage', pageController.sendpage) // saves a snapshot of a specific page a translator worked on
 
