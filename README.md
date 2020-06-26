@@ -37,7 +37,7 @@ Overview:
               token, user_id, displayname, role
   
 
-->Initial data set onload of the web dashboard
+"/initial" -> Initial data set onload of the web dashboard
 
     post /initial
     
@@ -51,7 +51,7 @@ Overview:
                                                              // ** a set of all existing projects the user owns
     
     
-->Creates a new project for a user
+"/projects/create" -> Creates a new project for a user
 
      post /projects/create
      
@@ -65,7 +65,7 @@ Overview:
                 or
                 project
                 
-->Load specific project of a user           
+"/projects/:project_id" -> Load specific project of a user           
 
     post  /projects/:project_id
     
@@ -75,7 +75,7 @@ Overview:
               or
               project, pages*                                 //
     
-->Applies changes to a specific project of a TM (projectname, deadline, langs). If a lang is added to the project it automatically creates a new translationpage for the added lang. 
+"/projects/:project_id/update" -> Applies changes to a specific project of a TM (projectname, deadline, langs). If a lang is added to the project it automatically creates a new translationpage for the added lang. 
 
     post  /projects/:project_id/update
     
@@ -91,7 +91,7 @@ Overview:
               "project updated"
               
 
-->Extension creates a base page snapshot
+"/projects/:project_id/snapshot" -> Extension creates a base page snapshot
 
     post  /projects/:project_id/snapshot
     
