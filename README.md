@@ -107,7 +107,7 @@ Overview:
               "Page successfully created."    
   
   
-->On initial load of the extension by a TM he gets all his projects and the related base pages 
+"/projects/extensions/initial" -> On initial load of the extension by a TM he gets all his projects and the related base pages 
 
     post  /projects/extensions/initial
     
@@ -119,7 +119,7 @@ Overview:
               or
               projects, basepages       
       
-->On initial load of the extension by a TR he gets all his translation pages and the related projects    
+"/translators/extension/initial" -> On initial load of the extension by a TR he gets all his translation pages and the related projects    
 
     post    /translators/extension/initial
     
@@ -131,7 +131,7 @@ Overview:
               or
               projects, translationpages
               
-->A TR can load a specific translationpage and the related basepage              
+"/translators/extension/getpage" -> A TR can load a specific translationpage and the related basepage              
 
     post    /translators/extension/getpage
     
@@ -145,7 +145,7 @@ Overview:
               translationpage, basepage
               
               
-->Saves a snapshot of a specific page a translator worked on              
+"/translators/extension/sendpage'" -> Saves a snapshot of a specific page a translator worked on              
 
     post    /translators/extension/sendpage'
     
@@ -164,14 +164,18 @@ Overview:
 
 
 /////////////DB MODELS SCHEMA\\\\\\\\\\\\\\\
+
 var UsersSchema = new Schema(
+
   {
+  
     password: { 
       type: String, 
       required: true, 
       minlength: 3, 
       maxlength: 100
     },
+    
     email: { 
       type: String, 
       trim: true, 
@@ -180,34 +184,44 @@ var UsersSchema = new Schema(
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'], 
       required: true, 
     },
+    
     role: { 
       type: Number, 
       required: true, 
       default: 0,
       enum: [0, 1, 2]  // Translationmanager 0 , Translator 1, Developer 2
     },
+    
     displayname: { 
       type: String, 
       required: true, 
       maxlength: 100
     },
+    
     translator_langs: { // Set of languages the user is allowed to translate
       type: Array, 
       required: true
     }, 
+    
     userreference: { // Set of translationmanagers _id the user is connected to and allowed to do translations for
       type: Array, 
       required: true
     }
+    
   },
+  
   { timestamps: true },
+  
   { collection: 'users'}
+  
 );
 
 
 
 var ProjectsSchema = new Schema(
+
   {
+  
     projectname: { 
       type: String, 
       required: true, 
@@ -217,30 +231,40 @@ var ProjectsSchema = new Schema(
       required: true,
       unique: true
     },
+    
     owner_id: { 
       type: String, 
       required: true, 
     },
+    
     baselang: { 
       type: String, 
       required: true, 
       lowercase: true
     },
+    
     langs: { // Set of languages the project will be translated into
       type: Array, 
       required: true
     },
+    
     deadline: { 
       type: Date      
     }
+    
   },
+  
   { timestamps: true },
+  
   { collection: 'projects'}
+  
 );
 
 
 var PagesSchema = new Schema(
+
   {
+  
     pagename: { 
       type: String, 
       required: true, 
@@ -250,44 +274,57 @@ var PagesSchema = new Schema(
       required: true,
       unique: true
     },
+    
     description: { 
       type: String, 
       // minlength: 3, 
       // maxlength: 600
     },
+    
     assigned: { 
       type: Date 
     },
+    
     page_url: { 
       type: String,
       required: true
     },
+    
     base_lang: { 
       type: String, 
       required: true, 
     },
+    
     lang: { // The language the page will be translated into
       type: String, 
     }, 
+    
     base_project_id: { 
       type: String, 
       required: true, 
     },
+    
     base_page_id: { // _id of the base snapshot page
       type: String, 
       default: "base"
     },
+    
     translator_id: { // _id of the assigned translator
       type: String, 
     },
     status: { 
       type: String,
     },
+    
     innerHTML: { 
       type: String, 
       required: true, 
     },
+    
   },
+  
   { timestamps: true },
+  
   { collection: 'pages'}
+  
 );
