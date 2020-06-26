@@ -1,8 +1,8 @@
 # wdys_api
 
-////////// API calls \\\\\\\\\\
+__API calls
 
-Overview:
+___Overview:
 
 
 "/login" -> Webversion login
@@ -163,9 +163,9 @@ Overview:
 
 
 
-/////////////DB MODELS SCHEMA\\\\\\\\\\\\\\\
+__DB MODELS SCHEMA
 
-var UsersSchema = new Schema(
+___UsersSchema(
 
   {
   
@@ -206,8 +206,7 @@ var UsersSchema = new Schema(
     userreference: { // Set of translationmanagers _id the user is connected to and allowed to do translations for
       type: Array, 
       required: true
-    }
-    
+    }    
   },
   { timestamps: true },
   { collection: 'users'}
@@ -215,7 +214,7 @@ var UsersSchema = new Schema(
 
 
 
-var ProjectsSchema = new Schema(
+___ProjectsSchema (
 
   {
   
@@ -247,15 +246,14 @@ var ProjectsSchema = new Schema(
     
     deadline: { 
       type: Date      
-    }
-    
+    }    
   },  
   { timestamps: true },  
   { collection: 'projects'}  
 );
 
 
-var PagesSchema = new Schema(
+___PagesSchema(
 
   {
   
@@ -313,8 +311,7 @@ var PagesSchema = new Schema(
     innerHTML: { 
       type: String, 
       required: true, 
-    },
-    
+    },    
   },  
   { timestamps: true },  
   { collection: 'pages'}  
