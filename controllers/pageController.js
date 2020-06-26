@@ -14,6 +14,7 @@ exports.snapshot = (req,res) => {
             base_lang: `${req.body.base_lang}`,
             base_project_id: `${req.params.project_id}`,
             innerHTML: `${req.body.innerHTML}`,
+            lang: `${req.body.base_lang}`
         })
     page.save((err)=>{
         if (err) {console.log(err); return res.send({'errorcode': 'Page creation failed'})}
@@ -36,7 +37,7 @@ exports.getpage = (req,res) => {
             }
         else {return res.send({"errorcode": "Could not load requested page"})}
     })
-}
+} 
 
 exports.sendpage = (req,res) => {
     Pages.findOneAndUpdate({pagename: req.body.pagename, translator_id: req.body.translator_id}, {innerHTML: req.body.innerHTML})

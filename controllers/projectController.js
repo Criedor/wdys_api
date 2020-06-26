@@ -56,43 +56,57 @@ exports.showProjectById = (req,res) => {
      });
 };  
 
-// STILL MISSING: Create new pages for added languages
-exports.updateProject = (req,res) => {
-    let newLangs
-    //Find the original project and store the current .langs
-    Projects.findOne({_id: `${req.params.project_id}`, owner_id: `${req.body.user_id}`})
-        .exec( (err, projects) => {
-            if(projects && !err) { 
-                newLangs = req.body.langs.filter(lang => !projects.langs.includes(lang))
-                }
-            else {
-                return res.send({"errorcode": "No projects found."})
-            }
-        
-        //after storing added langs in newLangs update the project
-        Projects.findOneAndUpdate(
-            {
-                _id: `${req.params.project_id}`, 
-                owner_id: `${req.body.user_id}`
-            },
-            {
-                projectname: `${req.body.projectname}`, 
-                deadline: `${req.body.deadline}`, 
-                $push: {langs: `${newLangs}`}
-            } 
-            )
-            .exec((err, projects) => {
-                if(projects && !err) {
 
-                    //create pages for the new added langs 
-                    return res.send("project updated")                        
-                    } 
-                else { 
-                    return res.send({"errorcode": "Could not create new pages"}+err)
+exports.updateProject = (req,res) => {
+    let lang_array = req.body.langs
+    Projects.findOneAndUpdate(
+        {
+            _id: `${req.params.project_id}`, 
+            owner_id: `${req.body.user_id}`
+        },
+        {
+            projectname: `${req.body.projectname}`, 
+            deadline: `${req.body.deadline}`, 
+            langs: req.body.langs
+        } 
+    )
+    .exec((err, projects) => {
+        if(projects && !err) {
+            Pages.findOne({base_project_id: projects._id, base_page_id: "base"})                                         //get basepage
+                .exec( (err, basepage) => {
+                    console.log("Basepage "+basepage)
+                    if(basepage && !err) {
+                        let newLang = req.body.langs.filter(lang => !projects.langs.includes(lang))
+                            newLang.map(x=>{
+                                console.log("Map Lang "+x)
+                                var page =  new Pages (
+                                    {
+                                        pagename: `${basepage.pagename}- ${x}`, 
+                                        page_url: `${basepage.page_url}`, 
+                                        base_lang: `${basepage.base_lang}`,
+                                        base_project_id: `${basepage.project_id}`,
+                                        lang: `${x}`,
+                                        innerHTML: `${basepage.innerHTML}`
+                                    })
+                                page.save((err)=>{
+                                    if (err) {console.log(err); return res.send({'errorcode': 'Page creation failed'})}
+                                    console.log("New translation page for "+x+" created.")
+                                });
+                            })
+                        return res.send('Project sucessfully updated.')
+                        }
+                    else {return res.send({"errorcode": "Could not load requested basepage"})
                     }
-            })
-        })
-}
+                });
+        }
+        else {
+            return res.send({"errorcode": "Project update failed"})
+        }
+    })
+} 
+
+
+
 
 exports.projects_initial = (req,res) => {
     Projects.find({owner_id: `${req.body.owner_id}`})
