@@ -68,7 +68,19 @@ ___Overview:___
      returns:   'errorcode': 'Project creation failed'
                 or
                 project
+    
+    
+    
+"/projects/delete" -> Deletes the selected project and all related pages.
 
+     post /projects/delete
+     
+     body:  project_id
+            owner_id                                         // owner_id = user_id
+            
+     returns:   "Project and related pages successfully deleted"
+                or
+                "An error occurred finding your project"
 
 
 
@@ -82,6 +94,30 @@ ___Overview:___
               or
               project, pages*                                 //
 
+
+
+"/projects/:project_id/base" -> Shows the basepage, the translation pages and translators (are setup for project languges) for a specific project           
+
+    post  /projects/:project_id/base
+    
+    returns:  "errorcode": "Could not load requested translationpages"
+              or
+              "errorcode": "Could not load requested basepage"
+              or
+              basepage, translationpages*, translators                                //*related to basepage
+
+
+
+"/projects/:project_id/base/assign" -> Assigns a translator to a translation page
+
+    post  /projects/:project_id/base/assign
+   
+    body: translator_id
+          page_id
+    
+    returns:  "errorcode": "Could not assign translator"
+              or
+              "Page assigned"
 
 
 

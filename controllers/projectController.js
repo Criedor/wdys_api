@@ -2,6 +2,7 @@ var path = require('path');
 const Projects = require('../database/models/projects');
 const Langs = require('../database/models/langs');
 const Pages = require('../database/models/pages');
+const pages = require('../database/models/pages');
 
 
 require('dotenv').config()
@@ -15,7 +16,7 @@ exports.initial = (req,res) => {
              Langs.find({})
                 .exec( (err, langs) => {
                     if(langs && !err) {
-                        res.send({"languages": langs, "userprojects": projects})} 
+                        res.status(200).send({"languages": langs, "userprojects": projects})} 
                     else { return res.send({"errorcode": "No languages found"})}
                 });
         } 
@@ -36,10 +37,28 @@ exports.create = (req,res) => {
         
     project.save((err)=>{
         if (err) { return res.send({'errorcode': 'Project creation failed'})}
-        else { return (res.send(project))
+        else { return (res.status(201).send(project))
         }
     });
 }
+
+
+exports.delete = (req,res) => {
+    Projects.findOneAndDelete({_id: req.body.project_id, owner_id: req.body.user_id})
+    .exec((err, project)=>{
+        if (!err && project) {
+            console.log(project)
+            Pages.deleteMany({base_project_id: project._id})
+            .exec((err, pages)=>{
+                if (!err && project) {
+                    res.status(200).send("Project and related pages successfully deleted")
+                }
+            })
+        }
+        else res.send("An error occurred finding your project")
+    })
+}
+
 
 exports.showProjectById = (req,res) => {
     Projects.findOne({_id: `${req.params.project_id}`, owner_id: `${req.body.user_id}`})
@@ -48,7 +67,7 @@ exports.showProjectById = (req,res) => {
             Pages.find({base_project_id: `${req.params.project_id}`, base_page_id: "base"})
                 .exec( (err, pages) => {
                     if(pages && !err) {
-                        res.send({"project": project, "pages": pages })} 
+                        res.status(200).send({"project": project, "pages": pages })} 
                     else { return res.send({"errorcode": "Could not load requested project", "project_id":`${req.params.project_id}`})}
                 });
         } 
@@ -84,7 +103,7 @@ exports.updateProject = (req,res) => {
                                         pagename: `${basepage.pagename}- ${x}`, 
                                         page_url: `${basepage.page_url}`, 
                                         base_lang: `${basepage.base_lang}`,
-                                        base_project_id: `${basepage.project_id}`,
+                                        base_project_id: `${basepage.base_project_id}`,
                                         lang: `${x}`,
                                         innerHTML: `${basepage.innerHTML}`
                                     })
@@ -93,7 +112,7 @@ exports.updateProject = (req,res) => {
                                     console.log("New translation page for "+x+" created.")
                                 });
                             })
-                        return res.send('Project sucessfully updated.')
+                        return res.status(200).send('Project sucessfully updated.')
                         }
                     else {return res.send({"errorcode": "Could not load requested basepage"})
                     }
@@ -117,7 +136,7 @@ exports.projects_initial = (req,res) => {
             Pages.find({base_project_id: { $in: base_ids }})
                 .exec( (err, pages) => {
                     if(pages && !err) {
-                        res.send({"projects": projects, "basepages": pages})} 
+                        res.status(200).send({"projects": projects, "basepages": pages})} 
                     else { return res.send({"errorcode": "No related pages found"})}
                 });
         } 
@@ -135,7 +154,7 @@ exports.translator_initial = (req,res) => {
             Projects.find({_id: { $in: base_projects_ids }})
                 .exec( (err, projects) => {
                     if(projects && !err) {
-                        res.send({"projects": projects, "translationpages": pages})} 
+                        res.status(200).send({"projects": projects, "translationpages": pages})} 
                     else { return res.send({"errorcode": "No related pages found"})}
                 });
         } 
