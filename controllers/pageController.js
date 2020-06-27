@@ -27,30 +27,6 @@ exports.snapshot = (req,res) => {
 }
 
 
-exports.getpage = (req,res) => {
-    Pages.findOne({pagename: req.body.pagename, translator_id: req.body.translator_id})     //get translation page
-    .exec( (err, page) => {
-        if(page && !err) {
-            Pages.findOne({_id: page.base_page_id})                                         //get basepage
-                .exec( (err, basepage) => {
-                if(basepage && !err) {
-                res.send({"translationpage": page, "basepage": basepage})} 
-                else {return res.send({"errorcode": "Could not load requested basepage"})}
-                });
-            }
-        else {return res.send({"errorcode": "Could not load requested page"})}
-    })
-} 
-
-exports.sendpage = (req,res) => {
-    Pages.findOneAndUpdate({pagename: req.body.pagename, translator_id: req.body.translator_id}, {innerHTML: req.body.innerHTML})
-    .exec( (err, page) => {
-        if(page && !err) {
-            res.send("Page saved")} 
-        else {return res.send({"errorcode": "Could not save page"})}
-        });
-}
-
 exports.showBasePage = (req,res) => {
     Pages.findOne({base_project_id: req.params.project_id, base_page_id: "base"})            //get basepage
     .exec( (err, basepage) => {

@@ -212,7 +212,15 @@ ___Overview:___
               
               
               
+"/translators" -> loads all translators added by a logged in TM
 
+    post    /translators/
+    
+    body:   user_id    
+          
+    returns:  "errorcode": "Could load translators"
+              or
+              translators
 
 
 

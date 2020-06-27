@@ -127,7 +127,7 @@ exports.updateProject = (req,res) => {
 
 
 
-exports.projects_initial = (req,res) => {
+exports.projects_extension_initial = (req,res) => {
     Projects.find({owner_id: `${req.body.owner_id}`})
     .exec( (err, projects) => {
         if(projects && !err) {
@@ -144,20 +144,4 @@ exports.projects_initial = (req,res) => {
      });
 };  
 
-exports.translator_initial = (req,res) => {
-    Pages.find({translator_id: `${req.body.translator_id}`})
-    .exec( (err, pages) => {
-        if(pages && !err) {
-            let base_projects_ids = []
-            pages.map(x=> base_projects_ids.push(x.base_project_id))
-            console.log(base_projects_ids)
-            Projects.find({_id: { $in: base_projects_ids }})
-                .exec( (err, projects) => {
-                    if(projects && !err) {
-                        res.status(200).send({"projects": projects, "translationpages": pages})} 
-                    else { return res.send({"errorcode": "No related pages found"})}
-                });
-        } 
-        else { return res.send({"errorcode": "No projects found."})}
-     });
-};  
+

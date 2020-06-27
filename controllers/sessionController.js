@@ -7,6 +7,11 @@ require('dotenv').config()
 require('../database/client')
 
 
+exports.null = (req,res) => {
+    res.status(415).send(`<img src="https://i.imgflip.com/46jc51.jpg" alt="api" />`)
+};  
+
+
 exports.login = (req,res) => {
     Users.findOne({email:`${req.body.email.trim()}`, })
     .exec( (err, user) => {
