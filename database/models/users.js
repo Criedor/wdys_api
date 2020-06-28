@@ -8,7 +8,8 @@ var UsersSchema = new Schema(
       type: String, 
       required: true, 
       minlength: 3, 
-      maxlength: 100
+      maxlength: 100,
+      default: "0000"
     },
     email: { 
       type: String, 

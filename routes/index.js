@@ -25,6 +25,11 @@ router.post('/translators/extension/initial', translatorController.translator_ex
 router.post('/translators/extension/getage', translatorController.getpage) // loads a snapshot of a specific page for translator and also send basepage innerHTML
 router.post('/translators/extension/sendpage', translatorController.sendpage) // saves a snapshot of a specific page a translator worked on
 router.post('/translators/', translatorController.translators_inital) // loads all translators added the by logged in TM
+router.post('/translators/create', translatorController.translator_create) // Checks if translator already exists. If so, add TM to userreference, update translator_langs. Else create a new translator
+router.post('/translators/remove', translatorController.translator_remove) // Removes a translator from the TM set of tr`s
+
+
+
 
 
 module.exports = router;

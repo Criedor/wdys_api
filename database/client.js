@@ -4,6 +4,7 @@ var cors = require('cors');
 //Set up default mongoose connection
 
 mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false);
 mongoose.connect(process.env.MONGO_DB, {useNewUrlParser: true, useUnifiedTopology: true})
         .then(() => console.log('Connected to the db'))
         .catch(err => console.error(err))

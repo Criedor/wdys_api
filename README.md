@@ -224,6 +224,38 @@ ___Overview:___
 
 
 
+"/translators/create" -> Checks if translator already exists. If so, add TM to userreference, update translator_langs. Else create a new translator.
+
+    post    /translators/create
+    
+    body:   user_id
+            email
+            displayname
+            translator_langs    
+          
+    returns:  'errorcode': 'Translator creation failed.'
+              or
+              "Could not update existing translator."
+              or
+              displayname, other translator langs           //if the translator already exists
+              or
+              "Translator created."
+
+
+
+"/translators/remove" -> Removes a TR from a TM's set of TR's
+
+    post    /translators/remove
+    
+    body:   user_id
+            translator_id
+          
+    returns:  "errorcode": "Could not remove Translator"
+              or
+              "Translator removed."
+
+
+
 __DB MODELS SCHEMA
 
 ___UsersSchema(
