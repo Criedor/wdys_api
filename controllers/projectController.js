@@ -10,7 +10,7 @@ require('../database/client')
 
 
 exports.initial = (req,res) => {
-    Projects.find({owner_id: `${req.body.owner_id}`})
+    Projects.find({owner_id: `${req.params.user_id}`})
     .exec( (err, projects) => {
         if(projects && !err) {
              Langs.find({})
@@ -61,7 +61,7 @@ exports.delete = (req,res) => {
 
 
 exports.showProjectById = (req,res) => {
-    Projects.findOne({_id: `${req.params.project_id}`, owner_id: `${req.body.user_id}`})
+    Projects.findOne({_id: `${req.params.project_id}`, owner_id: `${req.params.user_id}`})
     .exec( (err, project) => {
         if(project && !err) {
             Pages.find({base_project_id: `${req.params.project_id}`, base_page_id: "base"})
@@ -128,7 +128,7 @@ exports.updateProject = (req,res) => {
 
 
 exports.projects_extension_initial = (req,res) => {
-    Projects.find({owner_id: `${req.body.owner_id}`})
+    Projects.find({owner_id: `${req.params.user_id}`})
     .exec( (err, projects) => {
         if(projects && !err) {
             let base_ids = []

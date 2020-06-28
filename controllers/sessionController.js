@@ -13,7 +13,7 @@ exports.null = (req,res) => {
 
 
 exports.login = (req,res) => {
-    Users.findOne({email:`${req.body.email.trim()}`, })
+    Users.findOne({email:`${req.params.email.trim()}`, })
     .exec( (err, user) => {
         if(user && !err) {
             let pw=req.body.password

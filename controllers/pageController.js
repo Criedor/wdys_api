@@ -37,7 +37,7 @@ exports.showBasePage = (req,res) => {
                     let translation_langs = []
                     pages.map(p=> translation_langs.push(p.lang))
                     console.log(translation_langs)
-                    Users.find({role: 1, userreference: req.body.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
+                    Users.find({role: 1, userreference: req.params.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
                     .exec( (err, translators) => {
                         if(translators && !err) {
                             res.status(200).send({"translationpage": pages, "basepage": basepage, "translators": translators})

@@ -12,7 +12,7 @@ require('dotenv').config()
 require('../database/client')
 
 exports.translators_inital = (req,res) => {
-    Users.find({role: 1, userreference: req.body.user_id})
+    Users.find({role: 1, userreference: req.params.user_id})
     .exec( (err, translators) => {
         if(translators && !err) {
             res.send(translators)} 
@@ -23,7 +23,7 @@ exports.translators_inital = (req,res) => {
 }
 
 exports.translator_extension_initial = (req,res) => {
-    Pages.find({translator_id: `${req.body.translator_id}`})
+    Pages.find({translator_id: `${req.params.user_id}`})
     .exec( (err, pages) => {
         if(pages && !err) {
             let base_projects_ids = []
@@ -41,7 +41,7 @@ exports.translator_extension_initial = (req,res) => {
 
 
 exports.getpage = (req,res) => {
-    Pages.findOne({pagename: req.body.pagename, translator_id: req.body.translator_id})     //get translation page
+    Pages.findOne({_id: req.params.page_id, translator_id: req.params.user_id})     //get translation page
     .exec( (err, page) => {
         if(page && !err) {
             Pages.findOne({_id: page.base_page_id})                                         //get basepage
@@ -145,10 +145,10 @@ exports.translation_compare = (req,res) => {
 
 
 exports.translatorsById = (req,res) => {
-    Users.findOne({role: 1, userreference: req.body.user_id, _id: req.params.user_id})
+    Users.findOne({role: 1, userreference: req.params.user_id, _id: req.params.translator_id})
     .exec( (err, translator) => {
         if(translator && !err) {
-            Pages.find({translator_id: req.params.user_id})
+            Pages.find({translator_id: req.params.translator_id})
             .exec((err, pages)=>{
                 if(pages, !err) {
                     Pages.find({_id: pages[0].base_page_id})
@@ -173,7 +173,7 @@ exports.translatorsById = (req,res) => {
 }
 
 exports.translation_initial = (req, res) =>{
-    Pages.find({translator_id: req.body.user_id})
+    Pages.find({translator_id: req.params.user_id})
     .exec((err, pages)=>{
         if(pages, !err) {
             let base_project_ids = pages.map(x => x.base_project_id)

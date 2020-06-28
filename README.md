@@ -40,11 +40,9 @@ ___Overview:___
 
 
 
-"/initial" -> Initial data set onload of the web dashboard
+"/initial/:user_id" -> Initial data set onload of the web dashboard
 
-    post /initial
-    
-    body: owner_id        //is ==user_id
+    get /initial/:user_id
     
     returns:  "errorcode": "No languages found"
               or
@@ -306,6 +304,21 @@ ___Overview:___
               'errorcode': 'Could not load requested basepage.'
               or
               page, basepage, baseproject
+
+
+
+"/langs/create" ->  creates a new document in the langs collection
+
+    post    /langs/create
+
+    body:   lang                        // 3letter Code
+            langname
+
+    returns:  "errorcode":"Cant save language"
+              or
+              "Language created."
+
+
 
 __DB MODELS SCHEMA
 
