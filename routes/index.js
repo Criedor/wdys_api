@@ -27,9 +27,9 @@ router.post('/translators/extension/sendpage', translatorController.sendpage) //
 router.post('/translators/', translatorController.translators_inital) // loads all translators added the by the logged in TM
 router.post('/translators/create', translatorController.translator_create) // Checks if translator already exists. If so, add TM to userreference, update translator_langs. Else create a new translator
 router.post('/translators/remove', translatorController.translator_remove) // Removes a translator from the TM set of tr`s
-router.get('/translators/:user_id', translatorController.translatorsById) // get TR (check userreference) and all assigned pages
-router.post('/translators/:user_id/:page_id', translatorController.translation_compare) // load the innerHTML of a page and the related basepage.
-
+router.post('/translators/:user_id', translatorController.translatorsById) // get TR (check userreference) and all assigned pages
+router.get('/translators/:user_id/:page_id', translatorController.translation_compare) // load the innerHTML of a page and the related basepage.
+router.post('/translation', translatorController.translation_initial) //load all assigned pages and related projects
 
 
 

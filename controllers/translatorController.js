@@ -1,9 +1,12 @@
 var path = require('path');
 const Pages = require('../database/models/pages');
-const { userInfo } = require('os');
 const Users = require('../database/models/users');
+const Projects = require('../database/models/projects');
+const { userInfo } = require('os');
 const moment = require('moment');
 const { base } = require('../database/models/users');
+const { exec } = require('child_process');
+const projects = require('../database/models/projects');
 
 require('dotenv').config()
 require('../database/client')
@@ -113,19 +116,27 @@ exports.translator_remove = (req,res) => {
 
 
 exports.translation_compare = (req,res) => {
-    Pages.findOne({_id: req.params.page_id})
+    Pages.findById(req.params.page_id)
     .exec((err, page) => {
         if(err || !page) {
             res.status(400).send({'errorcode': 'Could not load requested page.'})
         }
         else {
-            Pages.findOne({_id: page.base_page_id})
+            Pages.findById(page.base_page_id)
             .exec((err, basepage) => {
                 if(err || !page) {
                     res.status(400).send({'errorcode': 'Could not load requested basepage.'})
                 }
                 else {
-                    res.status(200).send({'page': page, 'basepage':basepage})
+                    Projects.findById(basepage.base_project_id)
+                    .exec((err, baseproject)=>{
+                        if(err || !baseproject){
+                            res.status(400).send({'errorcode': 'Could not load requested baseproject.'})
+                        }
+                        else {
+                            res.status(200).send({'page': page, 'basepage':basepage, 'baseproject': baseproject})
+                        }
+                    })
                 }
             })
         }
@@ -136,11 +147,19 @@ exports.translation_compare = (req,res) => {
 exports.translatorsById = (req,res) => {
     Users.findOne({role: 1, userreference: req.body.user_id, _id: req.params.user_id})
     .exec( (err, translator) => {
-        if(translators && !err) {
+        if(translator && !err) {
             Pages.find({translator_id: req.params.user_id})
             .exec((err, pages)=>{
                 if(pages, !err) {
-                    res.status(200).send({'translator': translator, 'assignedPages': pages})
+                    Pages.find({_id: pages[0].base_page_id})
+                    .exec((err, basepages)=>{
+                        if(basepages, !err) {
+                            res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
+                        }
+                        else{
+                            res.status(400).send({'errorcode': 'Could not load basepages.'})
+                        }
+                    })
                 }
                 else {
                     res.status(400).send({'errorcode':'Could not load assigned pages.'})
@@ -152,3 +171,25 @@ exports.translatorsById = (req,res) => {
         }
     });
 }
+
+exports.translation_initial = (req, res) =>{
+    Pages.find({translator_id: req.body.user_id})
+    .exec((err, pages)=>{
+        if(pages, !err) {
+            let base_project_ids = pages.map(x => x.base_project_id)
+            console.log(base_project_ids)
+            projects.find({_id: {$in: base_project_ids}})
+            .exec((err, baseprojects)=>{
+                if(baseprojects, !err) {
+                    res.status(200).send({'assignedPages': pages, 'baseprojects': baseprojects})
+                }
+                else{
+                    res.status(400).send({'errorcode': 'Could not load baseprojects.'})
+                }
+            })
+        }
+        else {
+            res.status(400).send({'errorcode':'Could not load assigned pages.'})
+        }
+    })   
+} 

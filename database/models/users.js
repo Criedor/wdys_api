@@ -37,6 +37,11 @@ var UsersSchema = new Schema(
     userreference: { // Set of translationmanagers _id the user is connected to and allowed to do translations for
       type: Array, 
       required: true
+    }, 
+    onboard: { // If 0 show onboard page
+      type: Number, 
+      required: true,
+      default: 0
     }
   },
   { timestamps: true },

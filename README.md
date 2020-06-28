@@ -256,7 +256,7 @@ ___Overview:___
 
 
 
-"/translators/:user_id/:page_id" ->  load the innerHTML of a page and the related basepage.
+"/translators/:user_id/:page_id" ->  load the innerHTML of a page and the related basepage and baseproject.
 
     get    /translators/:user_id/:page_id
           
@@ -264,23 +264,38 @@ ___Overview:___
               or
               'errorcode': 'Could not load requested basepage.'
               or
-              page, basepage
+              page, basepage, baseproject
 
 
 
-"/translators/:user_id/" -> get TR (check userreference) and all assigned pages
+"/translators/:user_id/" -> get TR (check userreference) and all assigned pages, and basepages
 
     post    /translators/:user_id/:page_id              //:user_id of the TR
 
     body:   user_id                       //user_id of the TM
           
-    returns:  'errorcode':'Could not load assigned pages.'
+    returns:  'errorcode':'Could not load based pages.'
+              or
+              'errorcode':'Could not load assigned pages.'
               or
               "errorcode": "Could load translators"
               or
-              translator, pages              
+              translator, pages, basepages
 
 
+"/translation" -> get initial set of all assigned pages and related baseprojects              
+
+      post     /translation
+
+      body:   user_id
+
+      returns:  'errorcode': 'Could not load baseprojects.'
+                or
+                'errorcode':'Could not load assigned pages.'
+                or
+                assignedPages, baseprojects
+
+                
 
 __DB MODELS SCHEMA
 
