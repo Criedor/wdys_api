@@ -256,6 +256,32 @@ ___Overview:___
 
 
 
+"/translators/:user_id/:page_id" ->  load the innerHTML of a page and the related basepage.
+
+    get    /translators/:user_id/:page_id
+          
+    returns:  'errorcode': 'Could not load requested page.'
+              or
+              'errorcode': 'Could not load requested basepage.'
+              or
+              page, basepage
+
+
+
+"/translators/:user_id/" -> get TR (check userreference) and all assigned pages
+
+    post    /translators/:user_id/:page_id              //:user_id of the TR
+
+    body:   user_id                       //user_id of the TM
+          
+    returns:  'errorcode':'Could not load assigned pages.'
+              or
+              "errorcode": "Could load translators"
+              or
+              translator, pages              
+
+
+
 __DB MODELS SCHEMA
 
 ___UsersSchema(

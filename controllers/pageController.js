@@ -28,16 +28,16 @@ exports.snapshot = (req,res) => {
 
 
 exports.showBasePage = (req,res) => {
-    Pages.findOne({base_project_id: req.params.project_id, base_page_id: "base"})            //get basepage
+    Pages.findOne({_id: req.params.base_page_id})                                       //get basepage
     .exec( (err, basepage) => {
         if(basepage && !err) {
             Pages.find({base_page_id: basepage._id})                                    //get translationpages
                 .exec( (err, pages) => {
                 if(pages && !err) {
-                    let translator_langs = [basepage.base_lang]
-                    pages.map(p=> translator_langs.push(p.lang))
-                    console.log(translator_langs)
-                    Users.find({role: 1, userreference: req.body.user_id, translator_langs:{ $in: translator_langs}})       //get all translator with the related langs
+                    let translation_langs = []
+                    pages.map(p=> translation_langs.push(p.lang))
+                    console.log(translation_langs)
+                    Users.find({role: 1, userreference: req.body.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
                     .exec( (err, translators) => {
                         if(translators && !err) {
                             res.status(200).send({"translationpage": pages, "basepage": basepage, "translators": translators})

@@ -3,6 +3,7 @@ const Pages = require('../database/models/pages');
 const { userInfo } = require('os');
 const Users = require('../database/models/users');
 const moment = require('moment');
+const { base } = require('../database/models/users');
 
 require('dotenv').config()
 require('../database/client')
@@ -108,4 +109,46 @@ exports.translator_remove = (req,res) => {
         else {return res.send({"errorcode": "Could not remove Translator"})}
         }
     );
+}
+
+
+exports.translation_compare = (req,res) => {
+    Pages.findOne({_id: req.params.page_id})
+    .exec((err, page) => {
+        if(err || !page) {
+            res.status(400).send({'errorcode': 'Could not load requested page.'})
+        }
+        else {
+            Pages.findOne({_id: page.base_page_id})
+            .exec((err, basepage) => {
+                if(err || !page) {
+                    res.status(400).send({'errorcode': 'Could not load requested basepage.'})
+                }
+                else {
+                    res.status(200).send({'page': page, 'basepage':basepage})
+                }
+            })
+        }
+    })
+}
+
+
+exports.translatorsById = (req,res) => {
+    Users.findOne({role: 1, userreference: req.body.user_id, _id: req.params.user_id})
+    .exec( (err, translator) => {
+        if(translators && !err) {
+            Pages.find({translator_id: req.params.user_id})
+            .exec((err, pages)=>{
+                if(pages, !err) {
+                    res.status(200).send({'translator': translator, 'assignedPages': pages})
+                }
+                else {
+                    res.status(400).send({'errorcode':'Could not load assigned pages.'})
+                }
+            })   
+        } 
+        else {
+            return res.send({"errorcode": "Could load translators"})
+        }
+    });
 }
