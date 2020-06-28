@@ -295,7 +295,17 @@ ___Overview:___
                 or
                 assignedPages, baseprojects
 
-                
+
+
+"/translation/:page_id" ->  load the innerHTML of a page and the related basepage and baseproject.
+
+    get    /translation/:page_id
+          
+    returns:  'errorcode': 'Could not load requested page.'
+              or
+              'errorcode': 'Could not load requested basepage.'
+              or
+              page, basepage, baseproject
 
 __DB MODELS SCHEMA
 
