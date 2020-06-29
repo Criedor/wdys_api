@@ -3,6 +3,7 @@ const Pages = require('../database/models/pages');
 const { userInfo } = require('os');
 const Users = require('../database/models/users');
 const moment = require('moment');
+const Projects = require('../database/models/projects');
 
 require('dotenv').config()
 require('../database/client')
@@ -20,8 +21,36 @@ exports.snapshot = (req,res) => {
             lang: `${req.body.base_lang}`
         })
     page.save((err)=>{
-        if (err) {console.log(err); return res.send({'errorcode': 'Page creation failed'})}
-        else { return (res.send("Page successfully created."))
+        if (err) {
+            return res.send({'errorcode': 'Page creation failed'})
+        }
+        else {
+            Projects.findOne({_id: req.params.project_id})
+            .exec((err, project)=>{
+                if(err || !project) {
+                    return res.status(400).send({'errorcode':'Could not find baseproject.'})
+                }
+                else {
+                    project.langs.map( x=> {
+                        let translationpage = new Pages(
+                            {
+                                pagename: `${req.body.pagename} - ${x}`, 
+                                description: `${req.body.description}`, 
+                                page_url: `${req.body.page_url}`, 
+                                base_lang: `${req.body.base_lang}`,
+                                base_project_id: `${req.params.project_id}`,
+                                innerHTML: `${req.body.innerHTML}`,
+                                lang: x,
+                                base_page_id: page._id
+                            })
+                        translationpage.save((err)=>{
+                            if (err) {console.log(err); return res.send({'errorcode': 'Translationpage creation failed'})
+                            }
+                        })
+                    })
+                    return (res.send("Page successfully created."))
+                }
+            })
         }
     });
 }

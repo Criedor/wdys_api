@@ -30,7 +30,7 @@ exports.create = (req,res) => {
         {
             projectname: `${req.body.projectname}`, 
             owner_id: `${req.body.owner_id}`, 
-            langs: `${req.body.langs}`, 
+            langs: req.body.langs, 
             baselang: `${req.body.baselang}`,
             deadline: `${req.body.deadline}`
         })
@@ -44,10 +44,9 @@ exports.create = (req,res) => {
 
 
 exports.delete = (req,res) => {
-    Projects.findOneAndDelete({_id: req.body.project_id, owner_id: req.body.user_id})
+    Projects.findOneAndDelete({_id: req.body.project_id, owner_id: req.body.owner_id})
     .exec((err, project)=>{
         if (!err && project) {
-            console.log(project)
             Pages.deleteMany({base_project_id: project._id})
             .exec((err, pages)=>{
                 if (!err && project) {
@@ -81,7 +80,7 @@ exports.updateProject = (req,res) => {
     Projects.findOneAndUpdate(
         {
             _id: `${req.params.project_id}`, 
-            owner_id: `${req.body.user_id}`
+            owner_id: `${req.body.owner_id}`
         },
         {
             projectname: `${req.body.projectname}`, 
@@ -93,26 +92,30 @@ exports.updateProject = (req,res) => {
         if(projects && !err) {
             Pages.findOne({base_project_id: projects._id, base_page_id: "base"})                                         //get basepage
                 .exec( (err, basepage) => {
-                    console.log("Basepage "+basepage)
-                    if(basepage && !err) {
-                        let newLang = req.body.langs.filter(lang => !projects.langs.includes(lang))
-                            newLang.map(x=>{
-                                console.log("Map Lang "+x)
-                                var page =  new Pages (
-                                    {
-                                        pagename: `${basepage.pagename}- ${x}`, 
-                                        page_url: `${basepage.page_url}`, 
-                                        base_lang: `${basepage.base_lang}`,
-                                        base_project_id: `${basepage.base_project_id}`,
-                                        lang: `${x}`,
-                                        innerHTML: `${basepage.innerHTML}`
-                                    })
-                                page.save((err)=>{
-                                    if (err) {console.log(err); return res.send({'errorcode': 'Page creation failed'})}
-                                    console.log("New translation page for "+x+" created.")
-                                });
-                            })
-                        return res.status(200).send('Project sucessfully updated.')
+                    console.log(basepage)
+                    if(!err) {
+                            if(basepage !== null){
+                            let newLang = req.body.langs.filter(lang => !projects.langs.includes(lang))
+                                newLang.map(x=>{
+                                    console.log("Map Lang "+x)
+                                    var page =  new Pages (
+                                        {
+                                            pagename: `${basepage.pagename}- ${x}`, 
+                                            page_url: `${basepage.page_url}`, 
+                                            base_lang: `${basepage.base_lang}`,
+                                            base_project_id: `${basepage.base_project_id}`,
+                                            lang: `${x}`,
+                                            innerHTML: `${basepage.innerHTML}`
+                                        })
+                                    page.save((err)=>{
+                                        if (err) {console.log(err); return res.send({'errorcode': 'Page creation failed'})}
+                                        console.log("New translation page for "+x+" created.")
+                                    });
+                                })
+                            return res.status(200).send('Project sucessfully updated.')
+                            }
+              "project updated"
+                        return res.status(200).send('Project sucessfully updated and new translationpages created.')
                         }
                     else {return res.send({"errorcode": "Could not load requested basepage"})
                     }

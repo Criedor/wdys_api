@@ -12,12 +12,12 @@ require('dotenv').config()
 require('../database/client')
 
 exports.translators_inital = (req,res) => {
-    Users.find({role: 1, userreference: req.params.user_id})
+    Users.find({role: 1, userreference: {$in: req.params.user_id}})
     .exec( (err, translators) => {
         if(translators && !err) {
             res.send(translators)} 
         else {
-            return res.send({"errorcode": "Could load translators"})
+            return res.send({"errorcode": "Could not load translators"})
         }
     });
 }
@@ -150,20 +150,22 @@ exports.translatorsById = (req,res) => {
         if(translator && !err) {
             Pages.find({translator_id: req.params.translator_id})
             .exec((err, pages)=>{
-                if(pages, !err) {
-                    Pages.find({_id: pages[0].base_page_id})
-                    .exec((err, basepages)=>{
-                        if(basepages, !err) {
-                            res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
-                        }
-                        else{
-                            res.status(400).send({'errorcode': 'Could not load basepages.'})
-                        }
-                    })
-                }
-                else {
-                    res.status(400).send({'errorcode':'Could not load assigned pages.'})
-                }
+                if(!err) {
+                    if(pages.length >0){
+                        Pages.find({_id: pages[0].base_page_id})
+                        .exec((err, basepages)=>{
+                            if(basepages, !err) {
+                                res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
+                            }
+                            else{
+                                res.status(400).send({'errorcode': 'Could not load basepages.'})
+                            }
+                        })
+                    }
+                    else {
+                        res.status(200).send('No assigned pages')
+                    }
+                }    
             })   
         } 
         else {

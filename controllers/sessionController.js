@@ -13,7 +13,7 @@ exports.null = (req,res) => {
 
 
 exports.login = (req,res) => {
-    Users.findOne({email:`${req.params.email.trim()}`, })
+    Users.findOne({email:`${req.body.email.trim()}`, })
     .exec( (err, user) => {
         if(user && !err) {
             let pw=req.body.password
@@ -21,7 +21,7 @@ exports.login = (req,res) => {
             bcrypt.compare(pw, hash, (err, result)=>{
             if (err || !result) {return res.send({"errorcode": "1"})}  //errorcode 1= wrong password
                 else { 
-                    const token = jwt.sign({ 'name': req.body.name }, process.env.SECRET)
+                    const token = jwt.sign({ 'token': req.body.password }, process.env.SECRET)
                     return res.set('x-token', token).send({token:`${token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
                     }
                 })
