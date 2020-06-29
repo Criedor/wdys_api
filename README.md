@@ -1,6 +1,4 @@
-# wdys_api
-
-____WDYS REST API
+# WDYS REST API
 
 Endpoints:
 
