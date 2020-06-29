@@ -1,9 +1,8 @@
 # wdys_api
 
-__API calls___
+____WDYS REST API
 
-___Overview:___
-
+Endpoints:
 
 "/login" -> Webversion login
 
