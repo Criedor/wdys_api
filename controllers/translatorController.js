@@ -28,7 +28,7 @@ exports.translator_extension_initial = (req,res) => {
         if(pages && !err) {
             let base_projects_ids = []
             pages.map(x=> base_projects_ids.push(x.base_project_id))
-            Projects.find({_id: { $in: base_projects_ids }})
+            Projects.find({_id: { $in: base_projects_ids }, base_page_id: { $ne: "base" }})
                 .exec( (err, projects) => {
                     if(projects && !err) {
                         res.status(200).send({"projects": projects, "translationpages": pages})} 
