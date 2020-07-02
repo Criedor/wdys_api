@@ -2,6 +2,7 @@ var path = require('path');
 var jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Users = require('../database/models/users');
+const Langs = require('../database/models/langs');
 const saltRounds = 10;
 require('dotenv').config()
 require('../database/client')
@@ -10,6 +11,18 @@ require('../database/client')
 exports.null = (req,res) => {
     res.status(415).send(`<img src="https://i.imgflip.com/46jc51.jpg" alt="api" />`)
 };  
+
+exports.languages = (req, res) => {
+    Langs.find({})
+    .exec( (err, langs) => {
+        if(langs && !err) {
+            res.status(200).send({"languages": langs})
+        } 
+        else { 
+            return res.send({"errorcode": "No languages found"})
+        }
+    });   
+}
 
 
 exports.login = (req,res) => {

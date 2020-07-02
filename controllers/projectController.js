@@ -12,16 +12,12 @@ require('../database/client')
 exports.initial = (req,res) => {
     Projects.find({owner_id: `${req.params.user_id}`})
     .exec( (err, projects) => {
-        if(projects && !err) {
-             Langs.find({})
-                .exec( (err, langs) => {
-                    if(langs && !err) {
-                        res.status(200).send({"languages": langs, "userprojects": projects})} 
-                    else { return res.send({"errorcode": "No languages found"})}
-                });
-        } 
-        else { return res.send({"errorcode": "Fetching projects failed."})}
-     });
+        if(langs && !err) {
+            res.status(200).send({"userprojects": projects})} 
+        else { 
+            return res.send({"errorcode": "No languages found"})
+        }
+    });
 };  
 
 
