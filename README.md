@@ -39,7 +39,7 @@
               or
               "errorcode": "No projects found."
               or
-              langs*, projects**                             // *a collection of all defined langs for translation 
+              languages*, userprojects**                             // *a collection of all defined langs for translation 
                                                              // ** a set of all existing projects the user owns
 
 #### "/projects/create" -> Creates a new project for a user
