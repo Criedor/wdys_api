@@ -57,7 +57,7 @@ exports.getpage = (req,res) => {
 
 
 exports.sendpage = (req,res) => {
-    Pages.findOneAndUpdate({pagename: req.body.pagename, translator_id: req.body.translator_id}, {innerHTML: req.body.innerHTML})
+    Pages.findOneAndUpdate({page_id: req.body.page_id, translator_id: req.body.translator_id}, {innerHTML: req.body.innerHTML})
     .exec( (err, page) => {
         if(page && !err) {
             res.send("Page saved")} 
