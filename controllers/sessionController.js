@@ -12,18 +12,6 @@ exports.null = (req,res) => {
     res.status(415).send(`<img src="https://i.imgflip.com/46jc51.jpg" alt="api" />`)
 };  
 
-exports.languages = (req, res) => {
-    Langs.find({})
-    .exec( (err, langs) => {
-        if(langs && !err) {
-            res.status(200).send({"languages": langs})
-        } 
-        else { 
-            return res.send({"errorcode": "No languages found"})
-        }
-    });   
-}
-
 
 exports.login = (req,res) => {
     Users.findOne({email:`${req.body.email.trim()}`, })
