@@ -20,7 +20,7 @@ exports.initial = (req,res) => {
                     else { return res.send({"errorcode": "No languages found"})}
                 });
         } 
-        else { return res.send({"errorcode": "No projects found."})}
+        else { return res.send({"errorcode": "Fetching projects failed."})}
      });
 };  
 

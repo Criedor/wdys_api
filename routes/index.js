@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var cors = require('cors');
 const langController = require('../controllers/langController')
 const sessionController = require('../controllers/sessionController')
 const projectController = require('../controllers/projectController')
@@ -8,7 +7,7 @@ const pageController = require('../controllers/pageController')
 const translatorController = require('../controllers/translatorController')
 
 
-router.post('/langs/create', langController.lang); //adds a language to the langs collection
+// router.post('/langs/create', langController.lang); //adds a language to the langs collection
 router.get('/', sessionController.null);
 router.put('/login', sessionController.login); // Webversion login
 router.post('/signup', sessionController.signup); //Webversion signup

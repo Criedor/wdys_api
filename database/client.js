@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var cors = require('cors');
 
 //Set up default mongoose connection
 
