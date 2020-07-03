@@ -15,7 +15,8 @@ var ProjectsSchema = new Schema(
     },
     owner_id: { 
       type: String, 
-      required: true, 
+      minlength: 3, 
+      required: true
     },
     baselang: { 
       type: String, 

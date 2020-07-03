@@ -2,7 +2,7 @@ var path = require('path');
 const Projects = require('../database/models/projects');
 const Langs = require('../database/models/langs');
 const Pages = require('../database/models/pages');
-const pages = require('../database/models/pages');
+
 
 
 require('dotenv').config()
@@ -22,6 +22,7 @@ exports.initial = (req,res) => {
 
 
 exports.create = (req,res) => {
+        console.log(req.owner_id)
     var project =  new Projects (
         {
             projectname: `${req.body.projectname}`, 
@@ -40,7 +41,7 @@ exports.create = (req,res) => {
 
 
 exports.delete = (req,res) => {
-    Projects.findOneAndDelete({_id: req.body.project_id, owner_id: req.body.owner_id})
+    Projects.findOneAndDelete({_id: req.data.project_id, owner_id: req.data.owner_id})
     .exec((err, project)=>{
         if (!err && project) {
             Pages.deleteMany({base_project_id: project._id})
