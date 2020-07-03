@@ -41,7 +41,7 @@ exports.create = (req,res) => {
 
 
 exports.delete = (req,res) => {
-    Projects.findOneAndDelete({_id: req.data.project_id, owner_id: req.data.owner_id})
+    Projects.findOneAndDelete({_id: req.body.project_id, owner_id: req.body.owner_id})
     .exec((err, project)=>{
         if (!err && project) {
             Pages.deleteMany({base_project_id: project._id})
