@@ -16,6 +16,7 @@ var PagesSchema = new Schema(
     description: { 
       type: String, 
       default: "",
+      maxlength: 5000,
     },
     assigned: { 
       type: Date 
