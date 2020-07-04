@@ -77,7 +77,7 @@ exports.updateProject = (req,res) => {
     Projects.findOneAndUpdate(
         {
             _id: `${req.params.project_id}`, 
-            owner_id: `${req.body.owner_id}`
+            owner_id: `${req.body.user_id}`
         },
         {
             projectname: `${req.body.projectname}`, 
