@@ -60,25 +60,28 @@ exports.showBasePage = (req,res) => {
     Pages.findOne({_id: req.params.base_page_id})                                       //get basepage
     .exec( (err, basepage) => {
         if(basepage && !err) {
-            Pages.find({base_page_id: basepage._id})                                    //get translationpages
-                .exec( (err, pages) => {
+            Projects.findOne({_id: basepage.base_project_id})
+            .exec( (err, baseproject) => {
                 if(pages && !err) {
-                    let translation_langs = []
-                    pages.map(p=> translation_langs.push(p.lang))
-                    console.log(translation_langs)
-                    Users.find({role: 1, userreference: req.params.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
-                    .exec( (err, translators) => {
-                        if(translators && !err) {
-                            res.status(200).send({"translationpage": pages, "basepage": basepage, "translators": translators})
-                        } 
-                        else {
-                            return res.send({"errorcode": "Could not load requested translators"})
+                    Pages.find({base_page_id: basepage._id})                                    //get translationpages
+                        .exec( (err, pages) => {
+                        if(pages && !err) {
+                            let translation_langs = []
+                            pages.map(p=> translation_langs.push(p.lang))
+                            console.log(translation_langs)
+                            Users.find({role: 1, userreference: req.params.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
+                            .exec( (err, translators) => {
+                                if(translators && !err) {
+                                    res.status(200).send({"translationpage": pages, "basepage": basepage, "translators": translators, "baseproject": baseproject})
+                                } 
+                                else {
+                                    return res.send({"errorcode": "Could not load requested translators"})
+                                }
+                            })
                         }
-                    })
-                }
-                else {return res.send({"errorcode": "Could not load requested translationpages"})}
-                });
-            }
+                        else {return res.send({"errorcode": "Could not load requested translationpages"})}
+                        });
+                    }
         else {return res.send({"errorcode": "Could not load requested basepage"})}
     })
 } 
