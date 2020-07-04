@@ -82,6 +82,8 @@ exports.showBasePage = (req,res) => {
                         else {return res.send({"errorcode": "Could not load requested translationpages"})}
                         });
                     }
+                })
+            }
         else {return res.send({"errorcode": "Could not load requested basepage"})}
     })
 } 
