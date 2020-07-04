@@ -62,7 +62,7 @@ exports.showBasePage = (req,res) => {
         if(basepage && !err) {
             Projects.findOne({_id: basepage.base_project_id})
             .exec( (err, baseproject) => {
-                if(pages && !err) {
+                if(baseproject && !err) {
                     Pages.find({base_page_id: basepage._id})                                    //get translationpages
                         .exec( (err, pages) => {
                         if(pages && !err) {
