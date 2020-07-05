@@ -1,6 +1,5 @@
 var path = require('path');
 const Pages = require('../database/models/pages');
-const { userInfo } = require('os');
 const Users = require('../database/models/users');
 const moment = require('moment');
 const Projects = require('../database/models/projects');
@@ -103,7 +102,6 @@ exports.editBasePage = (req,res) => {
                     .exec( (err, pages) => {
                         if(pages && !err) {
                             pages.map(page=> 
-                                console.log("translationpage_id: "+page._id) &&
                                 Pages.findOneAndUpdate({_id: page._id},{pagename: `${req.body.pagename} - ${page.lang}`})
                                 .exec((err, translationpage) => {
                                     if(err) {
