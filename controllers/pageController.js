@@ -94,7 +94,7 @@ exports.showBasePage = (req,res) => {
 } 
 
 exports.editBasePage = (req,res) => {
-    Pages.findOne({_id: req.params.base_page_id})                                       //get basepage
+    Pages.findOneAndUpdate({_id: req.params.base_page_id},{pagename: req.body.pagename, description: req.body.description})                                       //get basepage
     .exec( (err, basepage) => {
         if(basepage && !err) {
             Projects.findOne({_id: basepage.base_project_id})
