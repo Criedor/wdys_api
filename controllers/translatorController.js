@@ -75,32 +75,47 @@ exports.sendpage = (req,res) => {
 exports.translator_create = (req,res) => {
     Users.findOne({email: req.body.email})
     .exec((err, existing_translator)=>{
-        if (!existing_translator) {
+
+        let pw = "0000"
+        bcrypt.genSalt(saltRounds, function(err, salt) { 
+            bcrypt.hash(pw, salt, (err, hash)=>{
+                if (err || !hash) 
+                    {
+                        res.status(400).send({'bcrypt error': err})
+                    }
+            })
+        })
+        if (err) {
+            res.send({"errorcode":"An unknown error occured."})
+        }
+        else if (!existing_translator) {
             var new_translator =  new Users (
                 {
-                    email: req.body.email, 
-                    role: 1, 
-                    translator_langs: req.body.translator_langs, 
-                    displayname: req.body.displayname,
-                    userreference: req.body.user_id
+                email: req.body.email, 
+                role: 1, 
+                translator_langs: req.body.translator_langs, 
+                displayname: req.body.displayname,
+                userreference: req.body.user_id,
+                password: hash
                 })
-                
-            new_translator.save((err)=>{
-                if (err) { return res.send({'errorcode': 'Translator creation failed.'})}
-                else { return (res.status(201).send("Translator created."))
-                }
-            });
+                      
+                new_translator.save((err)=>{
+                    if (err) { return res.send({'errorcode': 'Translator creation failed.'})}
+                    else { return (res.status(201).send("Translator created."))
+                    }
+                });
+            }
+            else {
+                // Check if lang is in translators set, else add it.
+                let new_translator_lang = req.body.translator_langs.filter(x => !existing_translator.translator_langs.includes(x));
+                Users.findOneAndUpdate({_id: existing_translator._id},{$push: {userreference: req.body.user_id, translator_langs: new_translator_lang}})
+                .exec((err)=>{
+                    if(err) res.status(400).send("Could not update existing translator.")
+                    else res.status(200).send({"displayname": existing_translator.displayname, "other_translator_langs": existing_translator.translator_langs.filter(y=>!req.body.translator_langs.includes(y))})
+                })
+            }
         }
-        else {
-            // Check if lang is in translators set, else add it.
-            let new_translator_lang = req.body.translator_langs.filter(x => !existing_translator.translator_langs.includes(x));
-            Users.findOneAndUpdate({_id: existing_translator._id},{$push: {userreference: req.body.user_id, translator_langs: new_translator_lang}})
-            .exec((err)=>{
-                if(err) res.status(400).send("Could not update existing translator.")
-                else res.status(200).send({"displayname": existing_translator.displayname, "other_translator_langs": existing_translator.translator_langs.filter(y=>!req.body.translator_langs.includes(y))})
-            })
-        }
-    })
+    )
 }
 
 
