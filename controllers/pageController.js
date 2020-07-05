@@ -104,7 +104,7 @@ exports.editBasePage = (req,res) => {
                     .exec( (err, pages) => {
                         if(pages && !err) {
                             pages.map(page=> 
-                                Pages.findOneAndUpdate({_id: page._id},{pagename: `${basepage.pagename} - ${page.lang} `})
+                                Pages.findOneAndUpdate({_id: page._id},{pagename: `${basepage.pagename} - ${page.lang}`})
                                 .exec((err, translationpage) => {
                                     if(err) {
                                         return res.send({"errorcode": "Could not update translationpage names"})
