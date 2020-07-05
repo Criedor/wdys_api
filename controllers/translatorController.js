@@ -2,11 +2,11 @@ var path = require('path');
 const Pages = require('../database/models/pages');
 const Users = require('../database/models/users');
 const Projects = require('../database/models/projects');
-const { userInfo } = require('os');
 const moment = require('moment');
-const { base } = require('../database/models/users');
-const { exec } = require('child_process');
 const projects = require('../database/models/projects');
+const saltRounds = 10;
+const bcrypt = require('bcrypt');
+
 
 require('dotenv').config()
 require('../database/client')
@@ -77,45 +77,49 @@ exports.translator_create = (req,res) => {
     .exec((err, existing_translator)=>{
 
         let pw = "0000"
+        let pwhash
         bcrypt.genSalt(saltRounds, function(err, salt) { 
             bcrypt.hash(pw, salt, (err, hash)=>{
                 if (err || !hash) 
                     {
                         res.status(400).send({'bcrypt error': err})
                     }
-            })
-        })
-        if (err) {
-            res.send({"errorcode":"An unknown error occured."})
-        }
-        else if (!existing_translator) {
-            var new_translator =  new Users (
-                {
-                email: req.body.email, 
-                role: 1, 
-                translator_langs: req.body.translator_langs, 
-                displayname: req.body.displayname,
-                userreference: req.body.user_id,
-                password: hash
-                })
-                      
-                new_translator.save((err)=>{
-                    if (err) { return res.send({'errorcode': 'Translator creation failed.'})}
-                    else { return (res.status(201).send("Translator created."))
+                else {
+                    pwhash = hash
+                    if (err) {
+                        res.send({"errorcode":"An unknown error occured."})
                     }
-                });
-            }
-            else {
-                // Check if lang is in translators set, else add it.
-                let new_translator_lang = req.body.translator_langs.filter(x => !existing_translator.translator_langs.includes(x));
-                Users.findOneAndUpdate({_id: existing_translator._id},{$push: {userreference: req.body.user_id, translator_langs: new_translator_lang}})
-                .exec((err)=>{
-                    if(err) res.status(400).send("Could not update existing translator.")
-                    else res.status(200).send({"displayname": existing_translator.displayname, "other_translator_langs": existing_translator.translator_langs.filter(y=>!req.body.translator_langs.includes(y))})
-                })
-            }
-        }
-    )
+                    else if (!existing_translator) {
+                        var new_translator =  new Users (
+                            {
+                            email: req.body.email, 
+                            role: 1, 
+                            translator_langs: req.body.translator_langs, 
+                            displayname: req.body.displayname,
+                            userreference: req.body.user_id,
+                            password: pwhash
+                            })
+                                  
+                            new_translator.save((err)=>{
+                                if (err) { return res.send({'errorcode': 'Translator creation failed.'})}
+                                else { return (res.status(201).send("Translator created."))
+                                }
+                            });
+                        }
+                        else {
+                            // Check if lang is in translators set, else add it.
+                            let new_translator_lang = req.body.translator_langs.filter(x => !existing_translator.translator_langs.includes(x));
+                            Users.findOneAndUpdate({_id: existing_translator._id},{$push: {userreference: req.body.user_id, translator_langs: new_translator_lang}})
+                            .exec((err)=>{
+                                if(err) res.status(400).send("Could not update existing translator.")
+                                else res.status(200).send({"displayname": existing_translator.displayname, "other_translator_langs": existing_translator.translator_langs.filter(y=>!req.body.translator_langs.includes(y))})
+                            })
+                        }
+                    }
+                }
+            )
+        })
+    })
 }
 
 
