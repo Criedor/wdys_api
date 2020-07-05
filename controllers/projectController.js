@@ -60,7 +60,7 @@ exports.showProjectById = (req,res) => {
     Projects.findOne({_id: `${req.params.project_id}`, owner_id: `${req.params.user_id}`})
     .exec( (err, project) => {
         if(project && !err) {
-            Pages.find({base_project_id: `${req.params.project_id}`, base_page_id: "base"})
+            Pages.find({base_project_id: `${req.params.project_id}`, base_page_id: "base"},{innerHTML: 0})
                 .exec( (err, pages) => {
                     if(pages && !err) {
                         res.status(200).send({"project": project, "pages": pages })} 
@@ -89,7 +89,6 @@ exports.updateProject = (req,res) => {
         if(projects && !err) {
             Pages.findOne({base_project_id: projects._id, base_page_id: "base"})                                         //get basepage
                 .exec( (err, basepage) => {
-                    console.log(basepage)
                     if(!err) {
                             if(basepage !== null){
                             let newLang = req.body.langs.filter(lang => !projects.langs.includes(lang))
@@ -133,7 +132,7 @@ exports.projects_extension_initial = (req,res) => {
         if(projects && !err) {
             let base_ids = []
             projects.map(x=> base_ids.push(x._id))
-            Pages.find({base_project_id: { $in: base_ids }})
+            Pages.find({base_project_id: { $in: base_ids }},{innerHTML: 0})
                 .exec( (err, pages) => {
                     if(pages && !err) {
                         res.status(200).send({"projects": projects, "basepages": pages})} 

@@ -23,7 +23,7 @@ exports.translators_inital = (req,res) => {
 }
 
 exports.translator_extension_initial = (req,res) => {
-    Pages.find({translator_id: `${req.params.user_id}`, base_page_id: { $ne: "base" }})
+    Pages.find({translator_id: `${req.params.user_id}`, base_page_id: { $ne: "base" }},{innerHTML: 0})
     .exec( (err, pages) => {
         if(pages && !err) {
             let base_projects_ids = []
@@ -41,10 +41,10 @@ exports.translator_extension_initial = (req,res) => {
 
 
 exports.getpage = (req,res) => {
-    Pages.findOne({_id: req.params.page_id, translator_id: req.params.user_id})     //get translation page
+    Pages.findOne({_id: req.params.page_id, translator_id: req.params.user_id},{innerHTML: 0})     //get translation page
     .exec( (err, page) => {
         if(page && !err) {
-            Pages.findOne({_id: page.base_page_id})                                         //get basepage
+            Pages.findOne({_id: page.base_page_id},{innerHTML: 0})                                         //get basepage
                 .exec( (err, basepage) => {
                 if(basepage && !err) {
                 res.send({"translationpage": page, "basepage": basepage})} 
@@ -175,11 +175,10 @@ exports.translatorsById = (req,res) => {
 }
 
 exports.translation_initial = (req, res) =>{
-    Pages.find({translator_id: req.params.user_id})
+    Pages.find({translator_id: req.params.user_id},{innerHTML: 0})
     .exec((err, pages)=>{
         if(pages, !err) {
             let base_project_ids = pages.map(x => x.base_project_id)
-            console.log(base_project_ids)
             projects.find({_id: {$in: base_project_ids}})
             .exec((err, baseprojects)=>{
                 if(baseprojects, !err) {
