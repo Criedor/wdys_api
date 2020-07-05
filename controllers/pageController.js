@@ -44,7 +44,7 @@ exports.snapshot = (req,res) => {
                                 base_page_id: page._id
                             })
                         translationpage.save((err)=>{
-                            if (err) {console.log(err); return res.send({'errorcode': 'Translationpage creation failed'})
+                            if (err) {return res.send({'errorcode': 'Translationpage creation failed'})
                             }
                         })
                     })
@@ -57,7 +57,7 @@ exports.snapshot = (req,res) => {
 
 
 exports.showBasePage = (req,res) => {
-    Pages.findOne({_id: req.params.base_page_id})                                       //get basepage
+    Pages.findOne({_id: req.params.base_page_id}, {innerHTML: 0})                                       //get basepage
     .exec( (err, basepage) => {
         if(basepage && !err) {
             Projects.findOne({_id: basepage.base_project_id})
@@ -68,7 +68,6 @@ exports.showBasePage = (req,res) => {
                         if(pages && !err) {
                             let translation_langs = []
                             pages.map(p=> translation_langs.push(p.lang))
-                            console.log(translation_langs)
                             Users.find({role: 1, userreference: req.params.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
                             .exec( (err, translators) => {
                                 if(translators && !err) {
@@ -109,7 +108,6 @@ exports.editBasePage = (req,res) => {
                                     if(err) {
                                         return res.send({"errorcode": "Could not update translationpage names"})
                                     }
-                                console.log(translationpage)
                                 })
                             )
                             return res.send("Basepage and Translationpages updated.")
