@@ -96,10 +96,11 @@ exports.updateProject = (req,res) => {
                                     console.log("Map Lang "+x)
                                     var page =  new Pages (
                                         {
-                                            pagename: `${basepage.pagename}- ${x}`, 
+                                            pagename: `${basepage.pagename} - ${x}`, 
                                             page_url: `${basepage.page_url}`, 
                                             base_lang: `${basepage.base_lang}`,
                                             base_project_id: `${basepage.base_project_id}`,
+                                            base_page_id: `${basepage._id}`,
                                             lang: `${x}`,
                                             innerHTML: `${basepage.innerHTML}`
                                         })
