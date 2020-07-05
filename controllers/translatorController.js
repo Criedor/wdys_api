@@ -116,13 +116,13 @@ exports.translator_remove = (req,res) => {
 
 
 exports.translation_compare = (req,res) => {
-    Pages.findById(req.params.page_id)
+    Pages.findById(req.params.page_id,{innerHTML:0})
     .exec((err, page) => {
         if(err || !page) {
             res.status(400).send({'errorcode': 'Could not load requested page.'})
         }
         else {
-            Pages.findById(page.base_page_id)
+            Pages.findById(page.base_page_id,{innerHTML:0})
             .exec((err, basepage) => {
                 if(err || !page) {
                     res.status(400).send({'errorcode': 'Could not load requested basepage.'})
@@ -148,11 +148,11 @@ exports.translatorsById = (req,res) => {
     Users.findOne({role: 1, userreference: req.params.user_id, _id: req.params.translator_id})
     .exec( (err, translator) => {
         if(translator && !err) {
-            Pages.find({translator_id: req.params.translator_id})
+            Pages.find({translator_id: req.params.translator_id}, {innerHTML:0})
             .exec((err, pages)=>{
                 if(!err) {
                     if(pages.length >0){
-                        Pages.find({_id: pages[0].base_page_id})
+                        Pages.find({_id: pages[0].base_page_id},{innerHTML:0})
                         .exec((err, basepages)=>{
                             if(basepages, !err) {
                                 res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
