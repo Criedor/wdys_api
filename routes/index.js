@@ -21,6 +21,7 @@ router.post('/projects/:project_id/snapshot', pageController.snapshot) // Extens
 router.put('/projects/:project_id/assign', pageController.assignTranslator) //Assigns a translator to a translation page
 router.get('/projects/:project_id/:user_id', projectController.showProjectById) // shows a specific project of a user
 router.get('/projects/:project_id/:user_id/:base_page_id', pageController.showBasePage) // Shows the basepage, the translation pages and translators (are setup for project languges) for a specific project
+router.put('/projects/:project_id/:user_id/:base_page_id/edit', pageController.editBasePage) // Shows the basepage, the translation pages and translators (are setup for project languges) for a specific project
 router.put('/translators/extension/sendpage', translatorController.sendpage) // saves a snapshot of a specific page a translator worked on
 router.get('/translators/extension/:user_id/initial', translatorController.translator_extension_initial) //on initial load of the extension by a TR he gets all his translation pages and the related projects
 router.get('/translators/extension/:user_id/:page_id', translatorController.getpage) // loads a snapshot of a specific page for translator and also send basepage innerHTML

@@ -93,6 +93,39 @@ exports.showBasePage = (req,res) => {
     })
 } 
 
+exports.editBasePage = (req,res) => {
+    Pages.findOne({_id: req.params.base_page_id})                                       //get basepage
+    .exec( (err, basepage) => {
+        if(basepage && !err) {
+            Projects.findOne({_id: basepage.base_project_id})
+            .exec( (err, baseproject) => {
+                if(baseproject && !err) {
+                    Pages.find({base_page_id: basepage._id})                                    //get translationpages
+                    .exec( (err, pages) => {
+                        if(pages && !err) {
+                            pages.map(page=> 
+                                Pages.findOneAndUpdate({_id: page._id},{pagename: `${basepage.pagename} - ${page.lang} `})
+                                .exec((err, translationpage) => {
+                                    if(err) {
+                                        return res.send({"errorcode": "Could not update translationpage names"})
+                                    }
+                                })
+                            )
+                            return res.send("Basepage and Translationpages updated.")
+                        }
+                    })
+                }
+                else {
+                    return res.send({"errorcode": "Could not load requested baseproject"})
+                }
+            })
+        }
+        else {
+            return res.send({"errorcode": "Could not load requested basepage"})
+        }
+    })
+} 
+
 
 exports.assignTranslator = (req,res) => {
     Pages.findOneAndUpdate({_id: req.body.page_id}, {translator_id: req.body.translator_id, assigned: new Date(), status: "open"})
