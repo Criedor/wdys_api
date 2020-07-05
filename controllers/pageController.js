@@ -103,7 +103,7 @@ exports.editBasePage = (req,res) => {
                     .exec( (err, pages) => {
                         if(pages && !err) {
                             pages.map(page=> 
-                                console.log("translationpage_id: "+page._id)
+                                console.log("translationpage_id: "+page._id) &&
                                 Pages.findOneAndUpdate({_id: page._id},{pagename: `${basepage.pagename} - ${page.lang}`})
                                 .exec((err, translationpage) => {
                                     if(err) {
