@@ -62,12 +62,10 @@ exports.showBasePage = (req,res) => {
             Projects.findOne({_id: basepage.base_project_id})
             .exec( (err, baseproject) => {
                 if(baseproject && !err) {
-                    Pages.find({base_page_id: basepage._id})                                    //get translationpages
+                    Pages.find({base_page_id: basepage._id},{innerHTML:0})                                    //get translationpages
                         .exec( (err, pages) => {
                         if(pages && !err) {
-                            let translation_langs = []
-                            pages.map(p=> translation_langs.push(p.lang))
-                            Users.find({role: 1, userreference: req.params.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: translation_langs }}]})       //get all translator with the related langs
+                            Users.find({role: 1, userreference: req.params.user_id, $and: [{translator_langs: {$in: basepage.base_lang}},{translator_langs: {$in: baseproject.langs }}]})       //get all translator with the related langs
                             .exec( (err, translators) => {
                                 if(translators && !err) {
                                     res.status(200).send({"translationpage": pages, "basepage": basepage, "translators": translators, "baseproject": baseproject})
@@ -98,7 +96,7 @@ exports.editBasePage = (req,res) => {
             Projects.findOne({_id: basepage.base_project_id})
             .exec( (err, baseproject) => {
                 if(baseproject && !err) {
-                    Pages.find({base_page_id: basepage._id})                                    //get translationpages
+                    Pages.find({base_page_id: basepage._id},{innerHTML:0})                                    //get translationpages
                     .exec( (err, pages) => {
                         if(pages && !err) {
                             pages.map(page=> 
