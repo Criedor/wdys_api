@@ -109,6 +109,7 @@ exports.editBasePage = (req,res) => {
                                     if(err) {
                                         return res.send({"errorcode": "Could not update translationpage names"})
                                     }
+                                console.log(translationpage)
                                 })
                             )
                             return res.send("Basepage and Translationpages updated.")
