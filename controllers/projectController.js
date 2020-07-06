@@ -22,7 +22,6 @@ exports.initial = (req,res) => {
 
 
 exports.create = (req,res) => {
-        console.log(req.owner_id)
     var project =  new Projects (
         {
             projectname: `${req.body.projectname}`, 
