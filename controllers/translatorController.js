@@ -11,7 +11,7 @@ require('dotenv').config()
 require('../database/client')
 
 exports.translators_inital = (req,res) => {
-    Users.find({role: 1, userreference: {$in: req.params.user_id}})
+    Users.find({role: 1, userreference: {$in: req.params.user_id}},{password: 0})
     .exec( (err, translators) => {
         if(translators && !err) {
             res.send(translators)} 
@@ -194,21 +194,24 @@ exports.translatorsById = (req,res) => {
 
 exports.translation_initial = (req, res) =>{
     Pages.find({translator_id: req.params.user_id},{innerHTML: 0})
-    .exec((err, pages)=>{
-        if(pages, !err) {
-            let base_project_ids = pages.map(x => x.base_project_id)
-            Projects.find({_id: {$in: base_project_ids}})
-            .exec((err, baseprojects)=>{
-                if(baseprojects, !err) {
-                    res.status(200).send({'assignedPages': pages, 'baseprojects': baseprojects})
-                }
-                else{
-                    res.status(400).send({'errorcode': 'Could not load baseprojects.'})
-                }
-            })
-        }
-        else {
-            res.status(400).send({'errorcode':'Could not load assigned pages.'})
-        }
-    })   
-} 
+    .then((pages) =>{
+        let assignedPages = []
+        const promises = pages.map(x => Projects.findOne({_id: x.base_project_id})
+        .then(baseproject =>{
+            return {
+                _id: x._id,
+                pagename: x.pagename,
+                base_lang: x.base_lang,
+                lang: x.lang,
+                deadline: baseproject.deadline,
+                projectname: baseproject.projectname,
+                page_url: x.page_url,
+                description: x.description
+            }
+        })) 
+        
+        Promise.all(promises)
+            .then(data => res.status(200).send(data))
+            .catch(err => res.status(400).send({'errorcode': 'An unknown error occured.'}))
+    }).catch(err => res.status(400).send({'errorcode': 'Could not load assigned pages.'}))}
+
