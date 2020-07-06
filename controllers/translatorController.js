@@ -163,26 +163,21 @@ exports.translation_compare = (req,res) => {
 
 
 exports.translatorsById = (req,res) => {
-    Users.findOne({role: 1, userreference: req.params.user_id, _id: req.params.translator_id})
+    Users.findOne({role: 1, userreference: req.params.user_id, _id: req.params.translator_id},{password:0})
     .exec( (err, translator) => {
         if(translator && !err) {
             Pages.find({translator_id: req.params.translator_id}, {innerHTML:0})
             .exec((err, pages)=>{
                 if(!err) {
-                    if(pages.length >0){
-                        Pages.find({_id: pages[0].base_page_id},{innerHTML:0})
-                        .exec((err, basepages)=>{
-                            if(basepages, !err) {
-                                res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
-                            }
-                            else{
-                                res.status(400).send({'errorcode': 'Could not load basepages.'})
-                            }
-                        })
-                    }
-                    else {
-                        res.status(200).send('No assigned pages')
-                    }
+                    Pages.find({_id: pages[0].base_page_id},{innerHTML:0})
+                    .exec((err, basepages)=>{
+                        if(basepages, !err) {
+                            res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
+                        }
+                        else{
+                            res.status(400).send({'errorcode': 'Could not load basepages.'})
+                        }
+                    })
                 }    
             })   
         } 
