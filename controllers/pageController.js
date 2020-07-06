@@ -123,6 +123,23 @@ exports.editBasePage = (req,res) => {
 } 
 
 
+
+exports.deleteBasePage = (req,res) => {
+    Pages.findOneAndDelete({_id: req.params.base_page_id})
+    .exec((err, page)=>{
+        if (!err && page) {
+            Pages.deleteMany({base_page_id: page._id})
+            .exec((err, pages)=>{
+                if (!err && pages) {
+                    res.status(200).send("Basepage and related translationpages successfully deleted")
+                }
+            })
+        }
+        else res.send("An error occurred finding your page")
+    })
+}
+
+
 exports.assignTranslator = (req,res) => {
     Pages.findOneAndUpdate({_id: req.body.page_id}, {translator_id: req.body.translator_id, assigned: new Date(), status: "open"})
     .exec( (err, page) => {
