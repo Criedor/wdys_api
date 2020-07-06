@@ -22,7 +22,7 @@ var UsersSchema = new Schema(
     role: { 
       type: Number, 
       required: true, 
-      default: 0,
+      default: "0",
       enum: [0, 1, 2]  // Translationmanager 0 , Translator 1, Developer 2
     },
     displayname: { 
