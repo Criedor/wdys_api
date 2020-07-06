@@ -10,6 +10,7 @@ const translatorController = require('../controllers/translatorController')
 // router.post('/langs/create', langController.lang); //adds a language to the langs collection
 router.get('/', sessionController.null);
 router.put('/login', sessionController.login); // Webversion login
+router.put('/verify', sessionController.tokenverify); // Webversion login
 router.get('/languages', langController.languages); // Get languages
 router.post('/signup', sessionController.signup); //Webversion signup
 router.get('/initial/:user_id', projectController.initial) //initial data set onload of the web dashboard

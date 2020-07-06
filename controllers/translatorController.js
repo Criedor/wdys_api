@@ -3,7 +3,6 @@ const Pages = require('../database/models/pages');
 const Users = require('../database/models/users');
 const Projects = require('../database/models/projects');
 const moment = require('moment');
-const projects = require('../database/models/projects');
 const saltRounds = 10;
 const bcrypt = require('bcrypt');
 
@@ -198,7 +197,7 @@ exports.translation_initial = (req, res) =>{
     .exec((err, pages)=>{
         if(pages, !err) {
             let base_project_ids = pages.map(x => x.base_project_id)
-            projects.find({_id: {$in: base_project_ids}})
+            Projects.find({_id: {$in: base_project_ids}})
             .exec((err, baseprojects)=>{
                 if(baseprojects, !err) {
                     res.status(200).send({'assignedPages': pages, 'baseprojects': baseprojects})

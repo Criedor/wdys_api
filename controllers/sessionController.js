@@ -31,6 +31,20 @@ exports.login = (req,res) => {
 };  
 
 
+exports.tokenverify = (req,res) => {
+    Users.findOne({password:`${req.body.token}`, })
+    .exec( (err, user) => {
+        if(user && !err) {
+            return res.send({token:`${req.body.token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
+            }   
+        else {
+            return res.send({"err": "Invalid token"})
+            }
+        }
+    )
+}
+
+
 exports.signup = (req,res) => {
     let pw = req.body.password
     let pwhash
