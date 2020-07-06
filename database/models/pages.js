@@ -7,7 +7,6 @@ var PagesSchema = new Schema(
     pagename: { 
       type: String, 
       required: true, 
-      trim: true,
       minlength: 3, 
       maxlength: 100,
       required: true,
