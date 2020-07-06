@@ -32,9 +32,14 @@ exports.login = (req,res) => {
 
 
 exports.tokenverify = (req,res) => {
-    Users.findOne({password:`${req.body.token}`, })
+    console.log(req.body)
+    let pw = jwt.verify(req.body.token, process.env.SECRET);
+    console.log(pw)
+
+    Users.findOne({_id:`${req.body.user_id}`, })
     .exec( (err, user) => {
         if(user && !err) {
+
             return res.send({token:`${req.body.token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
             }   
         else {
