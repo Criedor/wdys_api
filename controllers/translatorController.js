@@ -169,15 +169,20 @@ exports.translatorsById = (req,res) => {
             Pages.find({translator_id: req.params.translator_id}, {innerHTML:0})
             .exec((err, pages)=>{
                 if(!err) {
-                    Pages.find({_id: pages[0].base_page_id},{innerHTML:0})
-                    .exec((err, basepages)=>{
-                        if(basepages, !err) {
-                            res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
-                        }
-                        else{
-                            res.status(400).send({'errorcode': 'Could not load basepages.'})
-                        }
-                    })
+                    if(pages.length >0){
+                        Pages.find({_id: pages[0].base_page_id},{innerHTML:0})
+                        .exec((err, basepages)=>{
+                            if(basepages, !err) {
+                                res.status(200).send({'translator': translator, 'assignedPages': pages, 'basepages': basepages})
+                            }
+                            else{
+                                res.status(400).send({'errorcode': 'Could not load basepages.'})
+                            }
+                        })
+                    }
+                    else {
+                        res.status(200).send({'translator': translator, 'assignedPages': [], 'basepages': []})
+                    }
                 }    
             })   
         } 
