@@ -36,7 +36,7 @@ exports.snapshot = (req,res) => {
                                 pagename: `${req.body.pagename} - ${x}`, 
                                 description: `${req.body.description}`, 
                                 page_url: `${req.body.page_url}`, 
-                                base_lang: `${project.base_lang}`,
+                                base_lang: `${project.baselang}`,
                                 base_project_id: `${req.params.project_id}`,
                                 innerHTML: `${req.body.innerHTML}`,
                                 lang: x,
