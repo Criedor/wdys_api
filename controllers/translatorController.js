@@ -5,6 +5,7 @@ const Projects = require('../database/models/projects');
 const moment = require('moment');
 const saltRounds = 10;
 const bcrypt = require('bcrypt');
+const HTMLParser = require('node-html-parser');
 
 
 require('dotenv').config()
@@ -131,33 +132,56 @@ exports.translator_remove = (req,res) => {
 }
 
 
-exports.translation_compare = (req,res) => {
-    Pages.findById(req.params.page_id,{innerHTML:0})
-    .exec((err, page) => {
-        if(err || !page) {
-            res.status(400).send({'errorcode': 'Could not load requested page.'})
+exports.translation_compare = async (req,res) => {
+   try {
+       const translationpage = await Pages.findById(req.params.page_id)
+        const basepage = await Pages.findById(translationpage.base_page_id)
+        const root = HTMLParser.parse('<body data-id="1">'+basepage.innerHTML+'</body>');
+        const root2 = HTMLParser.parse('<body data-id="1">'+translationpage.innerHTML+'</body>');
+        const nodes = root.querySelectorAll('*');
+        const nodes2 = root2.querySelectorAll('*');
+        const nodesObj = {};
+        const difference = [];
+
+        for (let node of nodes) {
+            if ((node.innerHTML.trim()[0] !== '<') && node.tagName !== 'script' && node.innerHTML) {
+                nodesObj[node.getAttribute('data-id')] = { id: node.getAttribute('data-id'), baseText: node.text.trim(), parent: node.parentNode.getAttribute('data-id'), children: [], tag: node.tagName };
+                if (nodesObj[node.parentNode.getAttribute('data-id')]) nodesObj[node.parentNode.getAttribute('data-id')].children.push(node.getAttribute('data-id'));
+            }
         }
-        else {
-            Pages.findById(page.base_page_id,{innerHTML:0})
-            .exec((err, basepage) => {
-                if(err || !page) {
-                    res.status(400).send({'errorcode': 'Could not load requested basepage.'})
+        
+        for (let node of nodes2) {
+            if(node.getAttribute('data-id') === undefined) continue;
+            if ((node.innerHTML.trim()[0] !== '<') && node.tagName !== 'script' && node.innerHTML) {
+                nodesObj[node.getAttribute('data-id')].translation = node.text.trim();
+                if (nodesObj[node.getAttribute('data-id')].translation !== nodesObj[node.getAttribute('data-id')].baseText) {
+                    difference.push(node.getAttribute('data-id'));
                 }
-                else {
-                    Projects.findById(basepage.base_project_id)
-                    .exec((err, baseproject)=>{
-                        if(err || !baseproject){
-                            res.status(400).send({'errorcode': 'Could not load requested baseproject.'})
-                        }
-                        else {
-                            res.status(200).send({'page': page, 'basepage':basepage, 'baseproject': baseproject})
-                        }
-                    })
-                }
-            })
+            }
         }
-    })
+        const seen = []
+        const result = []
+        const recur = (arr, depth = 0, index = 0) => {
+            if (!seen.includes(nodesObj[arr[index]].id)) {
+                nodesObj[arr[index]].depth = depth;
+                result.push(nodesObj[arr[index]])
+                seen.push(nodesObj[arr[index]].id);
+                if (nodesObj[arr[index]].children.length) recur(nodesObj[arr[index]].children, depth + 1);
+                if (index === arr.length - 1) return
+                else recur(arr, depth, index + 1)
+            }
+        };
+
+        recur(difference)
+
+        res.send(result)
+        }
+
+    catch (err) {
+        res.send(err.msg)
+    }
 }
+
 
 
 exports.translatorsById = (req,res) => {

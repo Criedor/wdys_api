@@ -31,6 +31,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "mongoose": "^5.9.19",
+    "node-html-parser": "^1.2.20",
     "nodemon": "^2.0.4"
   }
 }
