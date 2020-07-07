@@ -20,7 +20,6 @@ var ProjectsSchema = new Schema(
     baselang: { 
       type: String, 
       required: true, 
-      lowercase: true
     },
     langs: { // Set of languages the project will be translated into
       type: Array, 
