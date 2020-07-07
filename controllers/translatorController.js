@@ -43,7 +43,7 @@ exports.getpage = (req,res) => {
     Pages.findOne({_id: req.params.page_id, translator_id: req.params.user_id})     //get translation page
     .exec( (err, page) => {
         if(page && !err) {
-            Pages.findOne({_id: page.base_page_id},{innerHTML: 0})                                         //get basepage
+            Pages.findOne({_id: page.base_page_id})                                         //get basepage
                 .exec( (err, basepage) => {
                 if(basepage && !err) {
                 res.send({"translationpage": page, "basepage": basepage})} 
