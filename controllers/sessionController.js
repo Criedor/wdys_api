@@ -34,16 +34,15 @@ exports.login = (req,res) => {
 exports.tokenverify = (req,res) => {
     console.log(req.body)
     let pw = jwt.verify(req.body.token, process.env.SECRET);
-    console.log(pw)
 
     Users.findOne({_id:`${req.body.user_id}`, })
     .exec( (err, user) => {
         if(user && !err) {
 
-            return res.send({token:`${req.body.token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
+            return res.status(200).send({token:`${req.body.token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
             }   
         else {
-            return res.send({"err": "Invalid token"})
+            return res.status(500).send({"err": "Invalid token"})
             }
         }
     )
