@@ -174,7 +174,7 @@ exports.translation_compare = async (req,res) => {
 
         recur(difference)
 
-        res.send(result, translationpage)
+        res.send({"result": result, "translationpage":translationpage})
         }
 
     catch (err) {
