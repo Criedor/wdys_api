@@ -106,9 +106,7 @@ exports.translator_create = (req,res) => {
                             });
                         }
                         else {
-                            // Check if lang is in translators set, else add it.
-                            let new_translator_lang = req.body.translator_langs.filter(x => !existing_translator.translator_langs.includes(x));
-                            Users.findOneAndUpdate({_id: existing_translator._id},{$push: {userreference: req.body.user_id, translator_langs: new_translator_lang}})
+                            Users.findOneAndUpdate({_id: existing_translator._id},{$addToSet: {userreference: req.body.user_id, translator_langs: req.body.translator_langs}})
                             .exec((err)=>{
                                 if(err) res.status(400).send("Could not update existing translator.")
                                 else res.status(200).send({"displayname": existing_translator.displayname, "other_translator_langs": existing_translator.translator_langs.filter(y=>!req.body.translator_langs.includes(y))})
