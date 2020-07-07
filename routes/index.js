@@ -15,7 +15,7 @@ router.get('/languages', langController.languages); // Get languages
 router.post('/signup', sessionController.signup); //Webversion signup
 router.get('/initial/:user_id', projectController.initial) //initial data set onload of the web dashboard
 router.post('/projects/create', projectController.create) //creates a new project for a user
-router.delete('/projects/delete', projectController.delete) //deletes a project and all connected pages.
+router.delete('/projects/:project_id/:user_id/delete', projectController.delete) //deletes a project and all connected pages.
 router.get('/projects/extensions/initial/:user_id', projectController.projects_extension_initial) //On initial load of the extension by a TM he gets all his projects and the related base pages
 router.put('/projects/:project_id/update', projectController.updateProject) // Applies changes to a specific project of a user (projectname, deadline, langs)
 router.post('/projects/:project_id/snapshot', pageController.snapshot) // Extension creates a page snapshot, only available for a translation manager
