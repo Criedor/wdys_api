@@ -134,7 +134,7 @@ exports.translator_remove = (req,res) => {
 
 exports.translation_compare = async (req,res) => {
    try {
-       const translationpage = await Pages.findById(req.params.page_id)
+        const translationpage = await Pages.findById(req.params.page_id)
         const basepage = await Pages.findById(translationpage.base_page_id)
         const root = HTMLParser.parse('<body data-id="1">'+basepage.innerHTML+'</body>');
         const root2 = HTMLParser.parse('<body data-id="1">'+translationpage.innerHTML+'</body>');
@@ -174,7 +174,7 @@ exports.translation_compare = async (req,res) => {
 
         recur(difference)
 
-        res.send(result)
+        res.send(result, translationpage)
         }
 
     catch (err) {
