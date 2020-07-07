@@ -39,10 +39,10 @@ exports.tokenverify = (req,res) => {
     .exec( (err, user) => {
         if(user && !err) {
 
-            return res.status(200).send({token:`${req.body.token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
+            return res.send({token:`${req.body.token}`, user_id: `${user._id}`, displayname: `${user.displayname}`, role: `${user.role}` })
             }   
         else {
-            return res.status(500).send({"err": "Invalid token"})
+            return res.send({"err": "Invalid token"})
             }
         }
     )
