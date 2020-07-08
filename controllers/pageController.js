@@ -17,7 +17,7 @@ exports.snapshot = (req,res) => {
             page_url: `${req.body.page_url}`, 
             base_project_id: `${req.params.project_id}`,
             innerHTML: `${req.body.innerHTML}`,
-            lang: `${req.body.base_lang}`
+            
         })
     page.save((err)=>{
         if (err) {
@@ -47,8 +47,8 @@ exports.snapshot = (req,res) => {
                             }
                         })
                     })
-                    Pages.findOneAndUpdate({pagename:`${req.body.pagename}`},{base_lang: project.baselang})
-                    .exec((err, project)=>{
+                    Pages.findOneAndUpdate({pagename:`${req.body.pagename}`},{base_lang: project.baselang, lang: project.baselang})
+                    .exec((err, result)=>{
                         if(!err && result){
                         return (res.send("Page successfully created."))
                         }

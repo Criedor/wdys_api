@@ -27,6 +27,7 @@ var PagesSchema = new Schema(
     base_lang: { 
       type: String, 
       required: true, 
+      default: "English"
     },
     lang: { // The language the page will be translated into
       type: String, 
