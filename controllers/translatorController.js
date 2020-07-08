@@ -185,7 +185,7 @@ exports.translation_compare = async (req,res) => {
 
 
 exports.translatorsById = (req,res) => {
-    Users.findOne({role: 1, userreference: req.params.user_id, _id: req.params.translator_id},{password:0})
+    Users.findOne({role: "1", userreference: req.params.user_id, _id: req.params.translator_id},{password:0})
     .exec( (err, translator) => {
         if(translator && !err) {
             Pages.find({translator_id: req.params.translator_id}, {innerHTML:0})
