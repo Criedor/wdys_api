@@ -3,6 +3,7 @@ const Pages = require('../database/models/pages');
 const Users = require('../database/models/users');
 const moment = require('moment');
 const Projects = require('../database/models/projects');
+const { findOneAndUpdate } = require('../database/models/pages');
 
 require('dotenv').config()
 require('../database/client')
@@ -14,7 +15,6 @@ exports.snapshot = (req,res) => {
             pagename: `${req.body.pagename}`, 
             description: `${req.body.description}`, 
             page_url: `${req.body.page_url}`, 
-            base_lang: `${req.body.base_lang}`,
             base_project_id: `${req.params.project_id}`,
             innerHTML: `${req.body.innerHTML}`,
             lang: `${req.body.base_lang}`
@@ -47,7 +47,12 @@ exports.snapshot = (req,res) => {
                             }
                         })
                     })
-                    return (res.send("Page successfully created."))
+                    Pages.findOneAndUpdate({pagename:`${req.body.pagename}`},{base_lang: project.baselang})
+                    .exec((err, project)=>{
+                        if(!err && result){
+                        return (res.send("Page successfully created."))
+                        }
+                    })
                 }
             })
         }
