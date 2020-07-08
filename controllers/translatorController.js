@@ -12,7 +12,7 @@ require('dotenv').config()
 require('../database/client')
 
 exports.translators_inital = (req,res) => {
-    Users.find({role: 1, userreference: {$in: req.params.user_id}},{password: 0})
+    Users.find({role: "1", userreference: {$in: req.params.user_id}},{password: 0})
     .exec( (err, translators) => {
         if(translators && !err) {
             res.send(translators)} 
